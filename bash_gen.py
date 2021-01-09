@@ -4,7 +4,7 @@ import sys, os
 
 in_arg_idx = 6
 out_arg_idx = 8
-args = ['!./darknet', 'detector', 'demo', 'dummy_nrg.data', 
+args = ['./darknet', 'detector', 'demo', 'dummy_nrg.data', 
         'yolov3-nrgr-10000-const-lr-1e-4.cfg', 
         'yolov3-nrgr-10000-const-lr-1e-4_15000.weights',
         '', '-out_filename', '', '-dont_show']
