@@ -16,6 +16,7 @@ in_dir = sys.argv[2]
 # Creates bash script
 with open(out_file, 'w') as f:
     f.write("#!/usr/bin/env bash\n\n")
+    f.write("mkdir -p " + out_dir "\n")
     first = True
     for filename in os.listdir(in_dir):
         print('file:', filename)
