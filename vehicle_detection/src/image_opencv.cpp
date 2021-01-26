@@ -888,6 +888,9 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
         FILE *file;
         bool file_opened = false;
         cv::Mat original_img = show_img->clone();
+        static char frame_name[1024];
+        sprintf(frame_name, "/content/mydrive/frames/%03d.jpg", frame_id);
+        imwrite(frame_name, original_img);
         for (i = 0; i < num; ++i) {
             char labelstr[4096] = { 0 };
             int class_id = -1;
