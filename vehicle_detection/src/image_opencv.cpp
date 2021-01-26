@@ -889,7 +889,7 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
         bool file_opened = false;
         cv::Mat original_img = show_img->clone();
         static char frame_name[1024];
-        sprintf(frame_name, "/content/mydrive/frames/%03d.jpg", frame_id);
+        sprintf(frame_name, "/content/mydrive/frames/out%03d.png", frame_id);
         imwrite(frame_name, original_img);
         for (i = 0; i < num; ++i) {
             char labelstr[4096] = { 0 };
@@ -1034,7 +1034,7 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
                     //     cvCopy(show_img, copy_img, 0);
                     // }
                     char image_name[1024];
-                    sprintf(image_name, "/content/mydrive/result_img/out%03d_%d%s.jpg", frame_id, obj_id++, class_name);
+                    sprintf(image_name, "/content/mydrive/result_img/out%03d_%d%s.png", frame_id, obj_id++, class_name);
                     cv::imwrite(image_name, cropped_img);
                     // CvRect rect = cvRect(pt1.x, pt1.y, pt2.x - pt1.x, pt2.y - pt1.y);
                     // cvSetImageROI(copy_img, rect);
