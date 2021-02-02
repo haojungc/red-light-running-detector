@@ -875,7 +875,7 @@ extern "C" void save_cv_jpg(mat_cv *img_src, const char *name)
 // ====================================================================
 // Draw Detection
 // ====================================================================
-extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, float thresh, char **names, image **alphabet, int classes, int ext_output, char *bboxes_output_file)
+extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, float thresh, char **names, image **alphabet, int classes, int ext_output)
 {
     try {
         cv::Mat *show_img = (cv::Mat*)mat;
@@ -994,11 +994,9 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
                     if (!file_opened) {
                         file_opened = true;
                         static char out_filename[1024];
-                        // file = fopen(bboxes_output_file, "a");
                         sprintf(out_filename, "/content/mydrive/result_img/out%03d_cars.txt", frame_id);
                         file = fopen(out_filename, "w");
                         if (!file) {
-                            // fprintf(stderr, "Error: Couldn't open file %s\n", bboxes_output_file);
                             fprintf(stderr, "Error: Couldn't open file %s\n", out_filename);
                             exit(EXIT_FAILURE);
                         }

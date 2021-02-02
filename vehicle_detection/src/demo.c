@@ -223,23 +223,9 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
         create_window_cv("Demo", full_screen, 1352, 1013);
     }
 
-
     write_cv* output_video_writer = NULL;
-    char bboxes_output_file[256] = "/content/mydrive/outputs/bboxes/";
     if (out_filename && !flag_exit)
     {
-        /* Set output filename for bboxes */
-        /* Extracts filename from file path */
-        char *slash = strrchr(out_filename, '/');
-        strcat(bboxes_output_file, (slash == NULL) ? out_filename : slash + 1);
-        /* Set file extension to 'txt' */
-        char *dot = strrchr(bboxes_output_file, '.');
-        if (dot == NULL) {
-            fprintf(stderr, "Error: file extension missing\n");
-            exit(EXIT_FAILURE);
-        }
-        strncpy(dot, ".txt", 5);
-
         int src_fps = 25;
         src_fps = get_stream_fps_cpp_cv(cap);
         output_video_writer =
@@ -303,7 +289,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
                 }
             }
 
-            if (!benchmark && !dontdraw_bbox) draw_detections_cv_v3(show_img, local_dets, local_nboxes, demo_thresh, demo_names, demo_alphabet, demo_classes, demo_ext_output, bboxes_output_file);
+            if (!benchmark && !dontdraw_bbox) draw_detections_cv_v3(show_img, local_dets, local_nboxes, demo_thresh, demo_names, demo_alphabet, demo_classes, demo_ext_output);
             free_detections(local_dets, local_nboxes);
 
             printf("\nFPS:%.1f \t AVG_FPS:%.1f\n", fps, avg_fps);
