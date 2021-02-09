@@ -30,6 +30,14 @@ then
 	exit 1
 fi
 
+check_file "vehicle_detection/darknet"
+retval=$?
+if [ $retval -eq 0 ]
+then
+	echo "Darknet for vehicle detection is not compiled. Go to 'vehicle_detection' directory and 'cmake . && make'."
+	exit 1
+fi
+
 lp_model="data/lp-detector/wpod-net_update1.h5"
 input_file=''
 output_file='output.mp4'
@@ -102,7 +110,6 @@ output_file=${input_file%/*/*}/$output_file
 
 # Detect vehicles
 cd vehicle_detection/
-cmake . && make
 ./darknet detector demo cfg/coco.data cfg/yolov3.cfg yolov3.weights \
 	$input_file -out_filename $output_file -dont_show
 cd ..
@@ -117,8 +124,8 @@ python license-plate-ocr.py $output_dir
 python gen-outputs.py $img_sequence_dir $output_dir > $csv_file
 
 # Clean files and draw output
-# rm $output_dir/*_lp.png
-# rm $output_dir/*car.png
-# rm $output_dir/*_cars.txt
-# rm $output_dir/*_lp.txt
-# rm $output_dir/*_str.txt
+rm $output_dir/*_lp.png
+rm $output_dir/*car.png
+rm $output_dir/*_cars.txt
+rm $output_dir/*_lp.txt
+rm $output_dir/*_str.txt
