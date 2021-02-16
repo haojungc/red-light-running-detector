@@ -990,7 +990,10 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
                 color.val[2] = blue * 256;
 
                 char *class_name = names[class_id];
-                if (strncmp(class_name, "car", 4) == 0 || strncmp(class_name, "bus", 4) == 0) {
+                if (strncmp(class_name, "car", 4) == 0
+                    || strncmp(class_name, "truck", 6) == 0
+                    || strncmp(class_name, "bus", 4) == 0
+                    || strncmp(class_name, "motorbike", 10) == 0) {
                     if (!file_opened) {
                         file_opened = true;
                         static char out_filename[1024];
@@ -1010,7 +1013,9 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
 
                     /* Class ID */
                     int id;
-                    if (strncmp(class_name, "car", 4) == 0)
+                    if (strncmp(class_name, "car", 4) == 0
+                        || strncmp(class_name, "truck", 6) == 0
+                        || strncmp(class_name, "motorbike", 10) == 0)
                         id = 0;
                     else if (strncmp(class_name, "bus", 4) == 0)
                         id = 1;
