@@ -115,13 +115,13 @@ cd vehicle_detection/
 cd ..
 
 # Detect license plates
-python license-plate-detection.py $output_dir $lp_model
+python3 license-plate-detection.py $output_dir $lp_model
 
 # OCR
-python license-plate-ocr.py $output_dir
+python3 license-plate-ocr.py $output_dir
 
 # Draw output and generate list
-python gen-outputs.py $img_sequence_dir $output_dir > $csv_file
+python3 gen-outputs.py $img_sequence_dir $output_dir > $csv_file
 
 # Clean files and draw output
 rm $output_dir/*_lp.png
