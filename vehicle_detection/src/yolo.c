@@ -353,6 +353,7 @@ void run_yolo(int argc, char **argv)
 	int ext_output = find_arg(argc, argv, "-ext_output");
     char *img_sequence_dir = find_char_arg(argc, argv, "-img_sequence_dir", 0);
     char *output_dir = find_char_arg(argc, argv, "-output_dir", 0);
+    
     if(argc < 6){
         fprintf(stderr, "usage: %s %s [train/test/valid] [cfg] [weights (optional)]\n", argv[0], argv[1]);
         return;

@@ -398,8 +398,10 @@ void run_coco(int argc, char **argv)
     int cam_index = find_int_arg(argc, argv, "-c", 0);
     int frame_skip = find_int_arg(argc, argv, "-s", 0);
 	int ext_output = find_arg(argc, argv, "-ext_output");
-
-    if(argc < 4){
+    char *img_sequence_dir = find_char_arg(argc, argv, "-img_sequence_dir", 0);
+    char *output_dir = find_char_arg(argc, argv, "-output_dir", 0);
+    
+    if(argc < 6){
         fprintf(stderr, "usage: %s %s [train/test/valid] [cfg] [weights (optional)]\n", argv[0], argv[1]);
         return;
     }
@@ -412,5 +414,5 @@ void run_coco(int argc, char **argv)
     else if(0==strcmp(argv[2], "valid")) validate_coco(cfg, weights);
     else if(0==strcmp(argv[2], "recall")) validate_coco_recall(cfg, weights);
     else if(0==strcmp(argv[2], "demo")) demo(cfg, weights, thresh, hier_thresh, cam_index, filename, coco_classes, 80, 1, frame_skip,
-		prefix, out_filename, mjpeg_port, 0, json_port, dont_show, ext_output, 0, 0, 0, 0, 0);
+		prefix, out_filename, mjpeg_port, 0, json_port, dont_show, ext_output, 0, 0, 0, 0, 0, img_sequence_dir, output_dir);
 }
