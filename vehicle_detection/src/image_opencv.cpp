@@ -875,7 +875,7 @@ extern "C" void save_cv_jpg(mat_cv *img_src, const char *name)
 // ====================================================================
 // Draw Detection
 // ====================================================================
-extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, float thresh, char **names, image **alphabet, int classes, int ext_output)
+extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, float thresh, char **names, image **alphabet, int classes, int ext_output, char *img_sequence_dir, char *output_dir)
 {
     try {
         cv::Mat *show_img = (cv::Mat*)mat;
@@ -889,7 +889,12 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
         bool file_opened = false;
         cv::Mat original_img = show_img->clone();
         static char frame_name[1024];
-        sprintf(frame_name, "/content/mydrive/frames/out%03d.png", frame_id);
+        
+        /* Erase the last character if it is '/' */
+        int last_index = strlen(img_sequence_dir) - 1;
+        if (img_sequence_dir[last_index] == '/')
+            img_sequence_dir[last_index] = '\0';
+        sprintf(frame_name, "%s/out%03d.png", img_sequence_dir, , frame_id);
         imwrite(frame_name, original_img);
         for (i = 0; i < num; ++i) {
             char labelstr[4096] = { 0 };
@@ -994,10 +999,15 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
                     || strncmp(class_name, "truck", 6) == 0
                     || strncmp(class_name, "bus", 4) == 0
                     || strncmp(class_name, "motorbike", 10) == 0) {
+                    /* Erases the last character if it is '/' */
+                    int last_index = strlen(output_dir) - 1;
+                    if (output_dir[last_index] == '/')
+                        output_dir[last_index] = '\0';
+
                     if (!file_opened) {
                         file_opened = true;
                         static char out_filename[1024];
-                        sprintf(out_filename, "/content/mydrive/result_img/out%03d_cars.txt", frame_id);
+                        sprintf(out_filename, "%s/out%03d_cars.txt", output_dir, frame_id);
                         file = fopen(out_filename, "w");
                         if (!file) {
                             fprintf(stderr, "Error: Couldn't open file %s\n", out_filename);
@@ -1037,7 +1047,7 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
                     //     cvCopy(show_img, copy_img, 0);
                     // }
                     char image_name[1024];
-                    sprintf(image_name, "/content/mydrive/result_img/out%03d_%d%s.png", frame_id, obj_id++, "car");
+                    sprintf(image_name, "%s/out%03d_%d%s.png", output_dir, frame_id, obj_id++, class_name);
                     cv::imwrite(image_name, cropped_img);
                     // CvRect rect = cvRect(pt1.x, pt1.y, pt2.x - pt1.x, pt2.y - pt1.y);
                     // cvSetImageROI(copy_img, rect);

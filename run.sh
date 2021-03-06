@@ -111,7 +111,7 @@ output_file=${input_file%/*/*}/$output_file
 # Detect vehicles
 cd vehicle_detection/
 ./darknet detector demo cfg/coco.data cfg/yolov3.cfg yolov3.weights \
-	$input_file -out_filename $output_file -dont_show
+	$input_file -out_filename $output_file -img_sequence_dir $img_sequence_dir -output_dir $output_dir -dont_show
 cd ..
 
 # Detect license plates
