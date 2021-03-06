@@ -73,7 +73,7 @@ while getopts 'i:o:c:l:h' OPTION; do
 done
 
 if [ -z "$input_file"  ]; then echo "Input file not set."; usage; exit 1; fi
-if [ -z "$output_dir" ]; then echo "Ouput dir not set."; usage; exit 1; fi
+if [ -z "$output_dir" ]; then echo "Output dir not set."; usage; exit 1; fi
 if [ -z "$csv_file"   ]; then echo "CSV file not set." ; usage; exit 1; fi
 
 # Check if input file exists
