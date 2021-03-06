@@ -894,7 +894,7 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
         int last_index = strlen(img_sequence_dir) - 1;
         if (img_sequence_dir[last_index] == '/')
             img_sequence_dir[last_index] = '\0';
-        sprintf(frame_name, "%s/out%03d.png", img_sequence_dir, , frame_id);
+        sprintf(frame_name, "%s/out%03d.png", img_sequence_dir, frame_id);
         imwrite(frame_name, original_img);
         for (i = 0; i < num; ++i) {
             char labelstr[4096] = { 0 };
