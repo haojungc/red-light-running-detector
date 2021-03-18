@@ -888,7 +888,7 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
         FILE *file;
         bool file_opened = false;
         cv::Mat original_img = show_img->clone();
-        static std::ofstream outFrame("redframe.txt", ios::app);   // txt file for detected frame
+        static std::ofstream outFrame("redframe.txt", std::ios::app);   // txt file for detected frame
         for (i = 0; i < num; ++i) {
             char labelstr[4096] = { 0 };
             int class_id = -1;
