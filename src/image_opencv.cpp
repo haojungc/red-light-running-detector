@@ -893,9 +893,7 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
             for (j = 0; j < classes; ++j) {
                 int show = strncmp(names[j], "dont_show", 9);
                 if (dets[i].prob[j] > thresh && show) {
-                    if (dets[i].classes == 0) {     // not know if classes is the right attr. and 0 represents red
-                        outFrame << frame_id << endl;
-                    }
+                    outFrame << frame_id << endl;
                     if (class_id < 0) {
                         strcat(labelstr, names[j]);
                         class_id = j;
