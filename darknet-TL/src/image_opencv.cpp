@@ -875,33 +875,23 @@ extern "C" void save_cv_jpg(mat_cv *img_src, const char *name)
 // ====================================================================
 // Draw Detection
 // ====================================================================
-extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, float thresh, char **names, image **alphabet, int classes, int ext_output, char *bboxes_output_file)
+extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, float thresh, char **names, image **alphabet, int classes, int ext_output)
 {
     try {
         cv::Mat *show_img = (cv::Mat*)mat;
         int i, j;
         if (!show_img) return;
         static int frame_id = 0;
-        int obj_id = 0;
         frame_id++;
 
-        FILE *file;
-        bool file_opened = false;
-        cv::Mat original_img = show_img->clone();
         static std::ofstream outFrame("redframe.txt", std::ios::app);   // txt file for detected frame
         for (i = 0; i < num; ++i) {
             char labelstr[4096] = { 0 };
             int class_id = -1;
-            int max_prob_class_id = -1;
-            float max_prob = 0.0f;
             for (j = 0; j < classes; ++j) {
                 int show = strncmp(names[j], "dont_show", 9);
                 if (dets[i].prob[j] > thresh && show) {
                     outFrame << frame_id << endl;
-                    if (dets[i].prob[j] > max_prob) {
-                        max_prob = dets[i].prob[j];
-                        max_prob_class_id = j;
-                    }
                     if (class_id < 0) {
                         strcat(labelstr, names[j]);
                         class_id = j;
@@ -988,58 +978,22 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
                 color.val[1] = green * 256;
                 color.val[2] = blue * 256;
 
-                char *class_name = names[class_id];
-                if (strncmp(class_name, "car", 4) == 0 || strncmp(class_name, "bus", 4) == 0) {
-                    if (!file_opened) {
-                        file_opened = true;
-                        static char out_filename[1024];
-                        // file = fopen(bboxes_output_file, "a");
-                        sprintf(out_filename, "/content/mydrive/result_img/out%03d_cars.txt", frame_id);
-                        file = fopen(out_filename, "w");
-                        if (!file) {
-                            // fprintf(stderr, "Error: Couldn't open file %s\n", bboxes_output_file);
-                            fprintf(stderr, "Error: Couldn't open file %s\n", out_filename);
-                            exit(EXIT_FAILURE);
-                        }
-                    }
-
-                    /* Size of the frame */
-                    cv::Size s = (*show_img).size();
-                    int w = s.width;
-                    int h = s.height;
-                    // printf("width: %4d, height: %4d\n", w, h);
-
-                    /* Class ID */
-                    int id;
-                    if (strncmp(class_name, "car", 4) == 0)
-                        id = 0;
-                    else if (strncmp(class_name, "bus", 4) == 0)
-                        id = 1;
-
-                    /* Writes (x'/w, y'/h, w'/w, h'/h) to file */
-                    fprintf(file, "%d %.6f %.6f %.6f %.6f\n",
-                            id, (float)(pt2.x + pt1.x) / (w * 2), (float)(pt2.y + pt1.y) / (h * 2), b.w*show_img->cols / w, b.h*show_img->rows / h);
-
-                    // Crops objects in each frame and saves the cropped images in result_img/
-                    static int copied_frame_id = -1;
-                    cv::Mat copied_img = original_img.clone();
-                    cv::Rect roi(pt1.x, pt1.y, pt2.x - pt1.x, pt2.y - pt1.y);
-                    cv::Mat cropped_img = copied_img(roi);
-                    // static IplImage* copy_img = NULL;
-                    // if (copied_frame_id != frame_id) {
-                    //     copied_frame_id = frame_id;
-                    //     if(copy_img == NULL)
-                    //         copy_img = cvCreateImage(cvSize(show_img->cols, show_img->rows), show_img->depth(), show_img->channels());
-                    //     cvCopy(show_img, copy_img, 0);
-                    // }
-                    char image_name[1024];
-                    sprintf(image_name, "/content/mydrive/result_img/out%03d_%d%s.jpg", frame_id, obj_id++, class_name);
-                    cv::imwrite(image_name, cropped_img);
-                    // CvRect rect = cvRect(pt1.x, pt1.y, pt2.x - pt1.x, pt2.y - pt1.y);
-                    // cvSetImageROI(copy_img, rect);
-                    // cvSaveImage(image_name, copy_img, 0);
-                    // cvResetImageROI(copy_img);
-                }
+                // you should create directory: result_img
+                //static int copied_frame_id = -1;
+                //static IplImage* copy_img = NULL;
+                //if (copied_frame_id != frame_id) {
+                //    copied_frame_id = frame_id;
+                //    if(copy_img == NULL) copy_img = cvCreateImage(cvSize(show_img->width, show_img->height), show_img->depth, show_img->nChannels);
+                //    cvCopy(show_img, copy_img, 0);
+                //}
+                //static int img_id = 0;
+                //img_id++;
+                //char image_name[1024];
+                //sprintf(image_name, "result_img/img_%d_%d_%d_%s.jpg", frame_id, img_id, class_id, names[class_id]);
+                //CvRect rect = cvRect(pt1.x, pt1.y, pt2.x - pt1.x, pt2.y - pt1.y);
+                //cvSetImageROI(copy_img, rect);
+                //cvSaveImage(image_name, copy_img, 0);
+                //cvResetImageROI(copy_img);
 
                 cv::rectangle(*show_img, pt1, pt2, color, width, 8, 0);
                 if (ext_output)
@@ -1058,8 +1012,6 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
         if (ext_output) {
             fflush(stdout);
         }
-        if (num > 0)
-            fclose(file);
     }
     catch (...) {
         cerr << "OpenCV exception: draw_detections_cv_v3() \n";
