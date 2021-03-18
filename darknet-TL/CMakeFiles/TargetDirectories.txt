@@ -1,0 +1,10 @@
+/home/thlin/Code/CSIE_Project/detect_TrafficLight/darknet/CMakeFiles/install.dir
+/home/thlin/Code/CSIE_Project/detect_TrafficLight/darknet/CMakeFiles/list_install_components.dir
+/home/thlin/Code/CSIE_Project/detect_TrafficLight/darknet/CMakeFiles/rebuild_cache.dir
+/home/thlin/Code/CSIE_Project/detect_TrafficLight/darknet/CMakeFiles/edit_cache.dir
+/home/thlin/Code/CSIE_Project/detect_TrafficLight/darknet/CMakeFiles/install/local.dir
+/home/thlin/Code/CSIE_Project/detect_TrafficLight/darknet/CMakeFiles/darknet.dir
+/home/thlin/Code/CSIE_Project/detect_TrafficLight/darknet/CMakeFiles/install/strip.dir
+/home/thlin/Code/CSIE_Project/detect_TrafficLight/darknet/CMakeFiles/uselib.dir
+/home/thlin/Code/CSIE_Project/detect_TrafficLight/darknet/CMakeFiles/uselib_track.dir
+/home/thlin/Code/CSIE_Project/detect_TrafficLight/darknet/CMakeFiles/dark.dir
