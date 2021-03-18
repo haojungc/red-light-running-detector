@@ -1,2 +1,0 @@
-/home/thlin/Code/CSIE_Project/detect_TrafficLight/darknet/CMakeFiles/CheckCUDA/CMakeFiles/rebuild_cache.dir
-/home/thlin/Code/CSIE_Project/detect_TrafficLight/darknet/CMakeFiles/CheckCUDA/CMakeFiles/edit_cache.dir
