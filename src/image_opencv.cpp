@@ -1,4 +1,5 @@
-#include "image_opencv.h"
+
++#include "image_opencv.h"
 #include <iostream>
 
 #ifdef OPENCV
@@ -37,7 +38,6 @@
 #endif
 
 //using namespace cv;
-
 using std::cerr;
 using std::endl;
 
@@ -839,7 +839,7 @@ extern "C" image get_image_from_stream_letterbox(cap_cv *cap, int w, int h, int 
 // ====================================================================
 extern int stbi_write_png(char const *filename, int w, int h, int comp, const void  *data, int stride_in_bytes);
 extern int stbi_write_jpg(char const *filename, int x, int y, int comp, const void  *data, int quality);
-
+Draw
 extern "C" void save_mat_png(cv::Mat img_src, const char *name)
 {
     cv::Mat img_rgb;
@@ -875,6 +875,8 @@ extern "C" void save_cv_jpg(mat_cv *img_src, const char *name)
 // ====================================================================
 // Draw Detection
 // ====================================================================
+
+// num (object numbers) names(class name) ckasses(maximum number of classes)
 extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, float thresh, char **names, image **alphabet, int classes, int ext_output)
 {
     try {
@@ -884,12 +886,16 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
         static int frame_id = 0;
         frame_id++;
 
+        static std::ofstream outFrame("redframe.txt", ios::app);   // txt file for detected frame
         for (i = 0; i < num; ++i) {
             char labelstr[4096] = { 0 };
             int class_id = -1;
             for (j = 0; j < classes; ++j) {
                 int show = strncmp(names[j], "dont_show", 9);
                 if (dets[i].prob[j] > thresh && show) {
+                    if (dets[i].classes == 0) {     // not know if classes is the right attr. and 0 represents red
+                        outFrame << frame_id << endl;
+                    }
                     if (class_id < 0) {
                         strcat(labelstr, names[j]);
                         class_id = j;
