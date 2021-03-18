@@ -48,10 +48,11 @@ if __name__ == '__main__':
 				L.sort(key=lambda x: x.tl()[0])
 				lp_str = ''.join([chr(l.cl()) for l in L])
 
-				with open('%s/%s_str.txt' % (output_dir,bname),'w') as f:
-					f.write(lp_str + '\n')
+                                if len(lp_str) >= 6:
+                                    with open('%s/%s_str.txt' % (output_dir,bname),'w') as f:
+                                            f.write(lp_str + '\n')
 
-				print('\t\tLP: %s' % lp_str)
+                                    print('\t\tLP: %s' % lp_str)
 
 			else:
 
