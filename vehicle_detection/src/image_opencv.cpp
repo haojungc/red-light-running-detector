@@ -888,9 +888,10 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
         int obj_id = 0;
 
         /* Not in red-light section */
-        if (frame_id < frame_id_start || frame_id > frame_id_end)
+        if (frame_id < frame_id_start || frame_id > frame_id_end) {
+            frame_id++;
             return;
-
+        }
         frame_id++;
 
         FILE *file;
