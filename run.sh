@@ -62,9 +62,11 @@ usage() {
 	exit 1
 }
 
-while getopts 'i:o:c:l:h' OPTION; do
+while getopts 'i:s:e:o:c:l:h' OPTION; do
 	case $OPTION in
 		i) input_file=$OPTARG;;
+        s) frame_id_start=$OPTARG;;
+        e) frame_id_end=$OPTARG;;
 		o) output_dir=$OPTARG;;
 		c) csv_file=$OPTARG;;
 		l) lp_model=$OPTARG;;
@@ -73,6 +75,8 @@ while getopts 'i:o:c:l:h' OPTION; do
 done
 
 if [ -z "$input_file"  ]; then echo "Input file not set."; usage; exit 1; fi
+if [ -z "$frame_id_start"  ]; then echo "frame_id_start not set."; usage; exit 1; fi
+if [ -z "$frame_id_end"  ]; then echo "frame_id_end not set."; usage; exit 1; fi
 if [ -z "$output_dir" ]; then echo "Output dir not set."; usage; exit 1; fi
 if [ -z "$csv_file"   ]; then echo "CSV file not set." ; usage; exit 1; fi
 
@@ -111,7 +115,8 @@ output_file=${input_file%/*/*}/$output_file
 # Detect vehicles
 cd vehicle_detection/
 ./darknet detector demo cfg/coco.data cfg/yolov3.cfg yolov3.weights \
-	$input_file -out_filename $output_file -img_sequence_dir $img_sequence_dir -output_dir $output_dir -dont_show
+	$input_file -frame_id_start $frame_id_start -frame_id_end $frame_id_end \
+    -out_filename $output_file -img_sequence_dir $img_sequence_dir -output_dir $output_dir -dont_show
 cd ..
 
 # Detect license plates
