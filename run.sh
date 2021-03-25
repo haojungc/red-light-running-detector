@@ -54,6 +54,8 @@ usage() {
 	echo "   bash $0 -i input/dir -o output/dir -c csv_file.csv [-h] [-l path/to/model]:"
 	echo ""
 	echo "   -i   Input file path (mp4)"
+	echo "   -s   frame_id_start"
+	echo "   -e   frame_id_end"
 	echo "   -o   Output dir path"
 	echo "   -c   Output CSV file path"
 	echo "   -l   Path to Keras LP detector model (default = $lp_model)"
