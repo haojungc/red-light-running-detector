@@ -4,6 +4,7 @@
 #include "utils.h"
 #include "parser.h"
 #include "box.h"
+#include "video.h"
 #include "demo.h"
 
 char *voc_names[] = {"aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train", "tvmonitor"};
@@ -353,6 +354,17 @@ void run_yolo(int argc, char **argv)
 	int ext_output = find_arg(argc, argv, "-ext_output");
     char *img_sequence_dir = find_char_arg(argc, argv, "-img_sequence_dir", 0);
     char *output_dir = find_char_arg(argc, argv, "-output_dir", 0);
+    int frame_id_start = find_int_arg(argc, argv, "-frame_id_start", -1);
+    int frame_id_end = find_int_arg(argc, argv, "-frame_id_end", -1);
+
+    video_section_t section;
+    if (frame_id_start == -1) {
+        section.frame_id_start = 0;
+        section.frame_id_end = 1e9;
+    } else {
+        section.frame_id_start = frame_id_start;
+        section.frame_id_end = frame_id_end;
+    }
     
     if(argc < 6){
         fprintf(stderr, "usage: %s %s [train/test/valid] [cfg] [weights (optional)]\n", argv[0], argv[1]);
@@ -367,5 +379,5 @@ void run_yolo(int argc, char **argv)
     else if(0==strcmp(argv[2], "valid")) validate_yolo(cfg, weights);
     else if(0==strcmp(argv[2], "recall")) validate_yolo_recall(cfg, weights);
     else if(0==strcmp(argv[2], "demo")) demo(cfg, weights, thresh, hier_thresh, cam_index, filename, voc_names, 20, 1, frame_skip,
-		prefix, out_filename, mjpeg_port, 0, json_port, dont_show, ext_output, 0, 0, 0, 0, 0, img_sequence_dir, output_dir);
+		prefix, out_filename, mjpeg_port, 0, json_port, dont_show, ext_output, 0, 0, 0, 0, 0, img_sequence_dir, output_dir, &section);
 }
