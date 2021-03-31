@@ -48,7 +48,8 @@ if __name__ == '__main__':
                 L.sort(key=lambda x: x.tl()[0])
                 lp_str = ''.join([chr(l.cl()) for l in L])
 
-                if len(lp_str) >= 6:
+                lp_len = len(lp_str)
+                if lp_len >= 6 and lp_len <= 7:
                     with open('%s/%s_str.txt' % (output_dir,bname),'w') as f:
                         f.write(lp_str + '\n')
 
