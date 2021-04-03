@@ -19,6 +19,8 @@ if __name__ == '__main__':
         input_dir  = sys.argv[1]
         output_dir = input_dir
 
+        lp_target = sys.argv[2]
+
         ocr_threshold = .4
 
         ocr_weights = bytes('data/ocr/ocr-net.weights', encoding='utf-8')
@@ -32,7 +34,11 @@ if __name__ == '__main__':
 
         print('Performing OCR...')
 
+        target_found = False
         for i,img_path in enumerate(imgs_paths):
+            if target_found = True:
+                print('\tTarget found. Ending OCR...')
+                break
 
             print('\tScanning %s' % img_path)
 
@@ -50,10 +56,20 @@ if __name__ == '__main__':
 
                 lp_len = len(lp_str)
                 if lp_len >= 6 and lp_len <= 7:
-                    with open('%s/%s_str.txt' % (output_dir,bname),'w') as f:
-                        f.write(lp_str + '\n')
-
                     print('\t\tLP: %s' % lp_str)
+
+                    if lp_str == lp_target:
+                        target_found = True
+
+                        # Erases the trailing substring "_lp" from `bname`.
+                        # original format of bname: "out<frame_id>_<object_id><class_name>_lp"
+                        # modified format of bname: "out<frame_id>_<object_id><class_name>"
+                        bname_split = bname.split("_")
+                        bname_target = bname_split[0] + bname_split[1]
+                        with open('%s/target.txt' % (output_dir), 'w') as f:
+                            f.write(bname_target + '\n')
+                        with open('%s/%s_str.txt' % (output_dir,bname),'w') as f:
+                            f.write(lp_str + '\n')
 
             else:
 

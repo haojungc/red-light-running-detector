@@ -58,6 +58,7 @@ usage() {
 	echo "   -e   frame_id_end"
 	echo "   -o   Output dir path"
 	echo "   -c   Output CSV file path"
+	echo "   -t   Target license plate"
 	echo "   -l   Path to Keras LP detector model (default = $lp_model)"
 	echo "   -h   Print this help information"
 	echo ""
@@ -70,6 +71,7 @@ while getopts 'i:s:e:o:c:l:h' OPTION; do
         s) frame_id_start=$OPTARG;;
         e) frame_id_end=$OPTARG;;
 		o) output_dir=$OPTARG;;
+        t) lp_target=$OPTARG;;
 		c) csv_file=$OPTARG;;
 		l) lp_model=$OPTARG;;
 		h) usage;;
@@ -80,6 +82,7 @@ if [ -z "$input_file"  ]; then echo "Input file not set."; usage; exit 1; fi
 if [ -z "$frame_id_start"  ]; then echo "frame_id_start not set."; usage; exit 1; fi
 if [ -z "$frame_id_end"  ]; then echo "frame_id_end not set."; usage; exit 1; fi
 if [ -z "$output_dir" ]; then echo "Output dir not set."; usage; exit 1; fi
+if [ -z "$lp_target" ]; then echo "Target license plate not set."; usage; exit 1; fi
 if [ -z "$csv_file"   ]; then echo "CSV file not set." ; usage; exit 1; fi
 
 # Check if input file exists
@@ -114,6 +117,13 @@ set -e
 # Set output filename
 output_file=${input_file%/*/*}/$output_file
 
+# Verifies the license plate format and erases '-' from the license plate
+lp_target=$(echo "$lp_target" | sed 's/-//')
+lp_len=${#lp_target}
+if [[ $lp_len -lt 6 || $lp_len -gt 7]]; then
+    echo "Invalid license plate (6 <= len <= 7, excluding '-')"
+    exit 1
+
 # Detect vehicles
 cd vehicle_detection/
 ./darknet detector demo cfg/coco.data cfg/yolov3.cfg yolov3.weights \
@@ -125,7 +135,7 @@ cd ..
 python3 license-plate-detection.py $output_dir $lp_model
 
 # OCR
-python3 license-plate-ocr.py $output_dir
+python3 license-plate-ocr.py $output_dir $lp_target
 
 # Draw output and generate list
 python3 gen-outputs.py $img_sequence_dir $output_dir > $csv_file
