@@ -65,7 +65,7 @@ usage() {
 	exit 1
 }
 
-while getopts 'i:s:e:o:c:l:h' OPTION; do
+while getopts 'i:s:e:o:t:c:l:h' OPTION; do
 	case $OPTION in
 		i) input_file=$OPTARG;;
         s) frame_id_start=$OPTARG;;
