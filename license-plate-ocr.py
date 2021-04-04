@@ -20,6 +20,7 @@ if __name__ == '__main__':
         output_dir = input_dir
 
         lp_target = sys.argv[2]
+        print('Target: %s' % lp_target)
 
         ocr_threshold = .4
 
