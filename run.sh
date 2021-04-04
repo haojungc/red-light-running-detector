@@ -124,6 +124,7 @@ if [[ $lp_len -lt 6 || $lp_len -gt 7]]
 then
     echo "Invalid license plate (6 <= len <= 7, excluding '-')"
     exit 1
+fi
 
 # Detect vehicles
 cd vehicle_detection/
