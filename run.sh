@@ -120,7 +120,7 @@ output_file=${input_file%/*/*}/$output_file
 # Verifies the license plate format and erases '-' from the license plate
 lp_target=$(echo "$lp_target" | sed 's/-//')
 lp_len=${#lp_target}
-if [[ $lp_len -lt 6 || $lp_len -gt 7]]
+if [[ $lp_len -lt 6 || $lp_len -gt 7 ]]
 then
     echo "Invalid license plate (6 <= len <= 7, excluding '-')"
     exit 1
