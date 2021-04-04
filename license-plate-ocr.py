@@ -36,7 +36,7 @@ if __name__ == '__main__':
 
         target_found = False
         for i,img_path in enumerate(imgs_paths):
-            if target_found = True:
+            if target_found == True:
                 print('\tTarget found. Ending OCR...')
                 break
 
@@ -75,7 +75,7 @@ if __name__ == '__main__':
 
                 print('No characters found')
 
-        if target_found = False:
+        if target_found == False:
             print('\tTarget not found. Ending OCR...')
 
     except:
