@@ -75,6 +75,9 @@ if __name__ == '__main__':
 
                 print('No characters found')
 
+        if target_found = False:
+            print('\tTarget not found. Ending OCR...')
+
     except:
         traceback.print_exc()
         sys.exit(1)
