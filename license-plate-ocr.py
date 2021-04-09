@@ -65,8 +65,7 @@ if __name__ == '__main__':
                         # Erases the trailing substring "_lp" from `bname`.
                         # original format of bname: "out<frame_id>_<object_id><class_name>_lp"
                         # modified format of bname: "out<frame_id>_<object_id><class_name>"
-                        bname_split = bname.split("_")
-                        bname_target = bname_split[0] + bname_split[1]
+                        bname_target = bname.rsplit('_', 1)[0]
                         with open('%s/target.txt' % (output_dir), 'w') as f:
                             f.write(bname_target + '\n')
                         with open('%s/%s_str.txt' % (output_dir,bname),'w') as f:
