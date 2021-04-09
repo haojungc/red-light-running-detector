@@ -20,7 +20,6 @@ if __name__ == '__main__':
         output_dir = input_dir
 
         lp_target = sys.argv[2]
-        print('Target: %s' % lp_target)
 
         ocr_threshold = .4
 
@@ -34,6 +33,7 @@ if __name__ == '__main__':
         imgs_paths = sorted(glob('%s/*lp.png' % output_dir))
 
         print('Performing OCR...')
+        print('Target: %s' % lp_target)
 
         target_found = False
         for i,img_path in enumerate(imgs_paths):
