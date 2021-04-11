@@ -70,13 +70,10 @@ if not ret:
     print('Error: Couldn\'t read the video')
     exit(1)
 
-frame_width = input_video.get(cv2.CAP_PROP_FRAME_WIDTH)
-frame_height = input_video.get(cv2.CAP_PROP_FRAME_HEIGHT)
-
-center_x = int(bbox_ratio[0] * frame_width)
-center_y = int(bbox_ratio[1] * frame_height)
-object_width = int(bbox_ratio[2] * frame_width)
-object_height = int(bbox_ratio[3] * frame_height)
+center_x = int(bbox_ratio[0] * size[0])
+center_y = int(bbox_ratio[1] * size[1])
+object_width = int(bbox_ratio[2] * size[0])
+object_height = int(bbox_ratio[3] * size[1])
 
 bbox = (((center_x << 1) - object_width) >> 1, ((center_y << 1) - object_height) >> 1, object_width, object_height)
 
