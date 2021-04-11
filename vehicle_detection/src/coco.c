@@ -407,9 +407,12 @@ void run_coco(int argc, char **argv)
     video_section_t section;
     if (frame_id_start == -1) {
         section.frame_id_start = 0;
-        section.frame_id_end = 1e9;
     } else {
         section.frame_id_start = frame_id_start;
+    }
+    if (frame_id_end == -1) {
+        section.frame_id_end = 1e9;
+    } else {
         section.frame_id_end = frame_id_end;
     }
     
