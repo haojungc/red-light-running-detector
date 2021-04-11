@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
     try:
 
-        input_dir  = sys.argv[1]
+        input_dir  = sys.argv[1].rstrip('/')
         output_dir = input_dir
 
         lp_threshold = .5

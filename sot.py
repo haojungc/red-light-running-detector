@@ -3,7 +3,7 @@ import sys
 import re
 
 video_dir = sys.argv[1]
-output_dir = sys.argv[2]
+output_dir = sys.argv[2].rstrip('/')
 target_lp = sys.argv[3]
 target_filename = output_dir + '/' + 'target.txt'
 target_frame_id = None
