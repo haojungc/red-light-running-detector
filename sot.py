@@ -81,6 +81,7 @@ bbox = (((center_x << 1) - object_width) >> 1, ((center_y << 1) - object_height)
 print('Start tracking %s' % (target_lp))
 frame_count = 0
 tracker_initialized = False
+f = open('%s/target_bboxes.txt' % (output_dir), 'w')
 while True:
     # Read a frame
     ret, frame = input_video.read()
@@ -88,6 +89,7 @@ while True:
 
     if not ret:
         print('End tracking')
+        f.close()
         break
 
     if frame_count > target_frame_id:
@@ -96,6 +98,7 @@ while True:
             ret = tracker.init(frame, bbox)
             if ret is False:
                 print("Failed to initialize tracker")
+                f.close()
                 exit(1)
             tracker_initialized = True
         else:
@@ -107,6 +110,9 @@ while True:
             pt1 = (int(bbox[0]), int(bbox[1]))
             pt2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
             cv2.rectangle(frame, pt1, pt2, (0,0,255), 5, 1) # BGR
+
+            # Saves xy-coordinates of target's bounding boxes
+            f.write('%03d %d %d %d %d\n' % (frame_count, bbox[0], bbox[1], bbox[2], bbox[3]))
 
     output_video.write(frame)
 
