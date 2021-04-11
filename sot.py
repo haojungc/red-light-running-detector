@@ -15,7 +15,7 @@ with open(target_filename, 'r') as f:
     # frame_id = 12, object_id = 5
     target_frame_id, target_object_id = list(map(int, re.findall(r'\d+', target)))
 
-    with open('out%03d_cars.txt' % (target_frame), 'r') as f2:
+    with open('out%03d_cars.txt' % (target_frame_id), 'r') as f2:
         line = None
         for i in range(target_object_id + 1):
             line = f2.readline()
