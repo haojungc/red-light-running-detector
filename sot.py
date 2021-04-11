@@ -90,7 +90,8 @@ while True:
     frame_count += 1
 
     if not ret:
-        exit(1)
+        print('Ending tracker')
+        break
 
     if frame_count > target_frame_id:
         if tracker_initialized is False:
@@ -112,6 +113,5 @@ while True:
 
     output_video.write(frame)
 
-print('Ending tracker')
 input_video.release()
 output_video.release()
