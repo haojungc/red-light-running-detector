@@ -4,6 +4,7 @@ import re
 
 video_dir = sys.argv[1]
 output_dir = sys.argv[2]
+target_lp = sys.argv[3]
 target_filename = output_dir + '/' + 'target.txt'
 target_frame_id = None
 bbox_ratio = (None, None, None, None)
@@ -80,6 +81,7 @@ object_height = int(bbox_ratio[3] * frame_height)
 bbox = (((center_x << 1) - object_width) >> 1, ((center_y << 1) - object_height) >> 1, object_width, object_height)
 
 # Track
+print('Start tracking %s' % (target_lp))
 frame_count = 0
 tracker_initialized = False
 while True:
@@ -110,5 +112,6 @@ while True:
 
     output_video.write(frame)
 
+print('Ending tracker')
 input_video.release()
 output_video.release()

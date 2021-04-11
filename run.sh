@@ -143,7 +143,7 @@ python3 license-plate-ocr.py $output_dir $lp_target
 python3 gen-outputs.py $img_sequence_dir $output_dir > $csv_file
 
 # Track the target vehicle and create an annotated video
-python3 sot.py $input_file $output_dir
+python3 sot.py $input_file $output_dir $lp_target
 
 # Clean files and draw output
 rm $output_dir/*_lp.png
