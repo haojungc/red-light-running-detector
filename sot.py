@@ -87,7 +87,7 @@ while True:
     frame_count += 1
 
     if not ret:
-        print('Ending tracker')
+        print('End tracking')
         break
 
     if frame_count > target_frame_id:
