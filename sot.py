@@ -106,7 +106,7 @@ while True:
         if ret and bbox[0] >= 0:
             pt1 = (int(bbox[0]), int(bbox[1]))
             pt2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
-            cv2.rectangle(frame, pt1, pt2, (255,0,0), 2, 1)
+            cv2.rectangle(frame, pt1, pt2, (0,0,255), 5, 1) # BGR
 
     output_video.write(frame)
 
