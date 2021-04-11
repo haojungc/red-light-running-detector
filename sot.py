@@ -77,7 +77,7 @@ center_y = int(bbox_ratio[1] * frame_height)
 object_width = int(bbox_ratio[2] * frame_width)
 object_height = int(bbox_ratio[3] * frame_height)
 
-bbox = ((center_x << 1 - object_width) >> 1, (center_y << 1 - object_height) >> 1, object_width, object_height)
+bbox = (((center_x << 1) - object_width) >> 1, ((center_y << 1) - object_height) >> 1, object_width, object_height)
 
 # Track
 frame_count = 0
