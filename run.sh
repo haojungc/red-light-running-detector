@@ -42,6 +42,8 @@ lp_model="data/lp-detector/wpod-net_update1.h5"
 input_file=''
 output_file='output.mp4'
 img_sequence_dir='frames/'
+frame_id_start='-1'
+frame_id_end='-1'
 output_dir=''
 csv_file=''
 
@@ -79,8 +81,6 @@ while getopts 'i:s:e:o:t:c:l:h' OPTION; do
 done
 
 if [ -z "$input_file"  ]; then echo "Input file not set."; usage; exit 1; fi
-if [ -z "$frame_id_start"  ]; then echo "frame_id_start not set."; usage; exit 1; fi
-if [ -z "$frame_id_end"  ]; then echo "frame_id_end not set."; usage; exit 1; fi
 if [ -z "$output_dir" ]; then echo "Output dir not set."; usage; exit 1; fi
 if [ -z "$lp_target" ]; then echo "Target license plate not set."; usage; exit 1; fi
 if [ -z "$csv_file"   ]; then echo "CSV file not set." ; usage; exit 1; fi
