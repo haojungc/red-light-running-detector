@@ -21,7 +21,7 @@ with open(target_filename, 'r') as f:
             line = f2.readline()
         # Removes class_id from `line` and converts the remaining part to a tuple with 4 elements.
         # `line` format: <class_id> <object_center_x_coord  / frame_width> <object_center_y_coord / real_height> <object_width / frame_width> <object_height / frame_height>
-        bbox_ratio = tuple(map(float, line.pop(0)))
+        bbox_ratio = tuple(map(float, line.split().pop(0)))
 
 (major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')
 
