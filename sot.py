@@ -56,7 +56,7 @@ size = (int(input_video.get(cv2.CAP_PROP_FRAME_WIDTH)), int(input_video.get(cv2.
 
 # Write video
 fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-output_video_name = output_dir.rsplit('/', 2)[0] + '/output_tracker.mp4'
+output_video_name = output_dir.rsplit('/', 1)[0] + '/output_tracker.mp4'
 output_video = cv2.VideoWriter(output_video_name,  fourcc, fps, size)
 
 # Exit if video isn't opened
