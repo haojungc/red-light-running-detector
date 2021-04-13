@@ -127,6 +127,8 @@ while True:
                     rects_until_target.append((pt1, pt2))
                 else:
                     rects_until_target.append(((0, 0), (0, 0)))
+
+            frames_until_target.reverse()
             rects_until_target.reverse() 
 
             # Draws rectangles on each frame
