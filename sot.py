@@ -31,23 +31,26 @@ with open(target_filename, 'r') as f:
 tracker_types = ['BOOSTING', 'MIL', 'KCF', 'TLD', 'MEDIANFLOW', 'GOTURN', 'MOSSE', 'CSRT']
 tracker_type = tracker_types[7]
 
-# Create tracker object
-if tracker_type == 'BOOSTING':
-    tracker = cv2.TrackerBoosting_create()
-if tracker_type == 'MIL':
-    tracker = cv2.TrackerMIL_create()
-if tracker_type == 'KCF':
-    tracker = cv2.TrackerKCF_create()
-if tracker_type == 'TLD':
-    tracker = cv2.TrackerTLD_create()
-if tracker_type == 'MEDIANFLOW':
-    tracker = cv2.TrackerMedianFlow_create()
-if tracker_type == 'GOTURN':
-    tracker = cv2.TrackerGOTURN_create()
-if tracker_type == 'MOSSE':
-    tracker = cv2.TrackerMOSSE_create()
-if tracker_type == "CSRT":
-    tracker = cv2.TrackerCSRT_create()
+def create_tracker(tracker_type):
+    # Create tracker object
+    if tracker_type == 'BOOSTING':
+        return cv2.TrackerBoosting_create()
+    if tracker_type == 'MIL':
+        return cv2.TrackerMIL_create()
+    if tracker_type == 'KCF':
+        return cv2.TrackerKCF_create()
+    if tracker_type == 'TLD':
+        return cv2.TrackerTLD_create()
+    if tracker_type == 'MEDIANFLOW':
+        return cv2.TrackerMedianFlow_create()
+    if tracker_type == 'GOTURN':
+        return cv2.TrackerGOTURN_create()
+    if tracker_type == 'MOSSE':
+        return cv2.TrackerMOSSE_create()
+    if tracker_type == "CSRT":
+        return cv2.TrackerCSRT_create()
+
+tracker = create_tracker(tracker_type)
 
 # Read video
 input_video = cv2.VideoCapture(video_dir)
@@ -138,6 +141,7 @@ while True:
                 output_video.write(frames_until_target[i])
             
             # Reinitializes the tracker
+            tracker = create_tracker(tracker_type)
             ret = tracker.init(frame, bbox_target)
             if ret is False:
                 print("Failed to initialize tracker")
