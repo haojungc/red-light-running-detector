@@ -76,11 +76,13 @@ object_width = int(bbox_ratio[2] * size[0])
 object_height = int(bbox_ratio[3] * size[1])
 
 bbox = (((center_x << 1) - object_width) >> 1, ((center_y << 1) - object_height) >> 1, object_width, object_height)
+bbox_target = bbox
 
 # Track
 print('Start tracking %s' % (target_lp))
 frame_count = 0
-tracker_initialized = False
+frames_until_target = []
+rects_until_target = []
 f = open('%s/target_bboxes.txt' % (output_dir), 'w')
 while True:
     # Read a frame
@@ -92,18 +94,58 @@ while True:
         f.close()
         break
 
-    if frame_count > target_frame_id:
-        if tracker_initialized is False:
+    # Stores all the frames until `target_frame_id`.
+    # If the target vehicle is found, track it backwards.
+    if frame_count <= target_frame_id:
+        frames_until_target.append(frame)
+        if frame_count == target_frame_id:
+            # Reverses the frame list.
+            # {f1, f2,..., ft} => {ft, f(t-1),..., f1}
+            # ft: the frame in which the target license plate is found
+            frames_until_target.reverse() 
+
             # Initialize tracker
-            ret = tracker.init(frame, bbox)
+            ret = tracker.init(frame, bbox_target)
             if ret is False:
                 print("Failed to initialize tracker")
                 f.close()
                 exit(1)
-            tracker_initialized = True
-        else:
-            # Update tracker
-            ret, bbox = tracker.update(frame)
+            pt1 = (int(bbox[0]), int(bbox[1]))
+            pt2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
+            rects_until_target.append((pt1, pt2))
+
+            # Tracks vehicle backwards from `ft`
+            for fr in frames_until_target[1:]:
+                # Update tracker
+                ret, bbox = tracker.update(fr)
+
+                # Stores the XY coordinates of the upper left point and the lower right point of the bbox.
+                # If the bbox is missing, store ((0,0), (0,0)) 
+                if ret and bbox[0] >= 0:
+                    pt1 = (int(bbox[0]), int(bbox[1]))
+                    pt2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
+                    rects_until_target.append((pt1, pt2))
+                else:
+                    rects_until_target.append(((0, 0), (0, 0)))
+            rects_until_target.reverse() 
+
+            # Draws rectangles on each frame
+            for i in range(len(frames_until_target)):
+                (pt1, pt2) = rects_until_target[i]
+                cv2.rectangle(frames_until_target[i], pt1, pt2, (0,0,255), 5, 1) # BGR
+                output_video.write(frames_until_target[i])
+            
+            # Reinitializes the tracker
+            ret = tracker.init(frame, bbox_target)
+            if ret is False:
+                print("Failed to initialize tracker")
+                f.close()
+                exit(1)
+
+    # Tracks the target vehicle
+    else:
+        # Update tracker
+        ret, bbox = tracker.update(frame)
 
         # Draw boundary box
         if ret and bbox[0] >= 0:
@@ -114,7 +156,7 @@ while True:
             # Saves xy-coordinates of target's bounding boxes
             f.write('%03d %d %d %d %d\n' % (frame_count, bbox[0], bbox[1], bbox[2], bbox[3]))
 
-    output_video.write(frame)
+        output_video.write(frame)
 
 input_video.release()
 output_video.release()
