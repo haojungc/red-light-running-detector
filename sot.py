@@ -2,6 +2,30 @@ import cv2
 import sys
 import re
 
+def create_tracker(tracker_type):
+    # Create tracker object
+    if tracker_type == 'BOOSTING':
+        return cv2.TrackerBoosting_create()
+    if tracker_type == 'MIL':
+        return cv2.TrackerMIL_create()
+    if tracker_type == 'KCF':
+        return cv2.TrackerKCF_create()
+    if tracker_type == 'TLD':
+        return cv2.TrackerTLD_create()
+    if tracker_type == 'MEDIANFLOW':
+        return cv2.TrackerMedianFlow_create()
+    if tracker_type == 'GOTURN':
+        return cv2.TrackerGOTURN_create()
+    if tracker_type == 'MOSSE':
+        return cv2.TrackerMOSSE_create()
+    if tracker_type == "CSRT":
+        return cv2.TrackerCSRT_create()
+
+def bbox_to_pts(bbox):
+    pt1 = (int(bbox[0]), int(bbox[1]))
+    pt2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
+    return (pt1, pt2)
+
 video_dir = sys.argv[1]
 output_dir = sys.argv[2].rstrip('/')
 target_lp = sys.argv[3]
@@ -30,25 +54,6 @@ with open(target_filename, 'r') as f:
 # All OpenCV trackers
 tracker_types = ['BOOSTING', 'MIL', 'KCF', 'TLD', 'MEDIANFLOW', 'GOTURN', 'MOSSE', 'CSRT']
 tracker_type = tracker_types[7]
-
-def create_tracker(tracker_type):
-    # Create tracker object
-    if tracker_type == 'BOOSTING':
-        return cv2.TrackerBoosting_create()
-    if tracker_type == 'MIL':
-        return cv2.TrackerMIL_create()
-    if tracker_type == 'KCF':
-        return cv2.TrackerKCF_create()
-    if tracker_type == 'TLD':
-        return cv2.TrackerTLD_create()
-    if tracker_type == 'MEDIANFLOW':
-        return cv2.TrackerMedianFlow_create()
-    if tracker_type == 'GOTURN':
-        return cv2.TrackerGOTURN_create()
-    if tracker_type == 'MOSSE':
-        return cv2.TrackerMOSSE_create()
-    if tracker_type == "CSRT":
-        return cv2.TrackerCSRT_create()
 
 tracker = create_tracker(tracker_type)
 
@@ -113,8 +118,7 @@ while True:
                 print("Failed to initialize tracker")
                 f.close()
                 exit(1)
-            pt1 = (int(bbox[0]), int(bbox[1]))
-            pt2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
+            (pt1, pt2) = bbox_to_pts(bbox_target)
             rects_until_target.append((pt1, pt2))
 
             # Tracks vehicle backwards from `ft`
@@ -125,8 +129,7 @@ while True:
                 # Stores the XY coordinates of the upper left point and the lower right point of the bbox.
                 # If the bbox is missing, store ((0,0), (0,0)) 
                 if ret and bbox[0] >= 0:
-                    pt1 = (int(bbox[0]), int(bbox[1]))
-                    pt2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
+                    (pt1, pt2) = bbox_to_pts(bbox)
                     rects_until_target.append((pt1, pt2))
                 else:
                     rects_until_target.append(((0, 0), (0, 0)))
@@ -155,8 +158,7 @@ while True:
 
         # Draw boundary box
         if ret and bbox[0] >= 0:
-            pt1 = (int(bbox[0]), int(bbox[1]))
-            pt2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
+            (pt1, pt2) = bbox_to_pts(bbox)
             cv2.rectangle(frame, pt1, pt2, (0,0,255), 5, 1) # BGR
 
             # Saves xy-coordinates of target's bounding boxes
