@@ -28,6 +28,9 @@ if __name__ == '__main__':
         wpod_net = load_model(wpod_net_path)
 
         imgs_paths = glob('%s/*car.png' % input_dir)
+        imgs_paths = imgs_paths + glob('%s/*motorbike.png' % input_dir)
+        imgs_paths = imgs_paths + glob('%s/*truck.png' % input_dir)
+        imgs_paths = imgs_paths + glob('%s/*bus.png' % input_dir)
 
         print('Searching for license plates using WPOD-NET')
 
