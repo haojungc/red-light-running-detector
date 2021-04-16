@@ -31,6 +31,7 @@ if __name__ == '__main__':
         imgs_paths = imgs_paths + glob('%s/*motorbike.png' % input_dir)
         imgs_paths = imgs_paths + glob('%s/*truck.png' % input_dir)
         imgs_paths = imgs_paths + glob('%s/*bus.png' % input_dir)
+        imgs_paths.sort()
 
         print('Searching for license plates using WPOD-NET')
 
