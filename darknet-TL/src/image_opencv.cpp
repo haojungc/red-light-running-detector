@@ -1,4 +1,5 @@
 #include "image_opencv.h"
+#include "video.h"
 #include <iostream>
 
 #ifdef OPENCV
@@ -875,14 +876,32 @@ extern "C" void save_cv_jpg(mat_cv *img_src, const char *name)
 // ====================================================================
 // Draw Detection
 // ====================================================================
-extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, float thresh, char **names, image **alphabet, int classes, int ext_output)
+extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, float thresh, char **names, image **alphabet, int classes, int ext_output, char *img_sequence_dir, char *output_dir, video_section_t *section)
 {
     try {
         cv::Mat *show_img = (cv::Mat*)mat;
         int i, j;
         if (!show_img) return;
         static int frame_id = 0;
+        int frame_id_start = section->frame_id_start;
+        int frame_id_end = section->frame_id_end;
+
+        /* Not in red-light section */
+        if (frame_id < frame_id_start || frame_id > frame_id_end) {
+            frame_id++;
+            return;
+        }
         frame_id++;
+
+        /* Erases the trailing character '/' */
+        int last_index = strlen(img_sequence_dir) - 1;
+        if (img_sequence_dir[last_index] == '/')
+            img_sequence_dir[last_index] = '\0';
+
+        /* Sets the name of the output frame */
+        static char frame_name[1024];
+        sprintf(frame_name, "%s/out%03d.png", img_sequence_dir, frame_id);
+        imwrite(frame_name, show_img->clone());
 
         static std::ofstream outFrame("redframe.txt", std::ios::app);   // txt file for detected frame
         for (i = 0; i < num; ++i) {

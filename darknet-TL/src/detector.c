@@ -6,6 +6,7 @@
 #include "utils.h"
 #include "parser.h"
 #include "box.h"
+#include "video.h"
 #include "demo.h"
 #include "option_list.h"
 
@@ -1965,7 +1966,24 @@ void run_detector(int argc, char **argv)
     int ext_output = find_arg(argc, argv, "-ext_output");
     int save_labels = find_arg(argc, argv, "-save_labels");
     char* chart_path = find_char_arg(argc, argv, "-chart", 0);
-    if (argc < 4) {
+    char *img_sequence_dir = find_char_arg(argc, argv, "-img_sequence_dir", 0);
+    char *output_dir = find_char_arg(argc, argv, "-output_dir", 0);
+    int frame_id_start = find_int_arg(argc, argv, "-frame_id_start", -1);
+    int frame_id_end = find_int_arg(argc, argv, "-frame_id_end", -1);
+
+    video_section_t section;
+    if (frame_id_start == -1) {
+        section.frame_id_start = 0;
+    } else {
+        section.frame_id_start = frame_id_start;
+    }
+    if (frame_id_end == -1) {
+        section.frame_id_end = 1e9;
+    } else {
+        section.frame_id_end = frame_id_end;
+    }
+
+    if(argc < 6){
         fprintf(stderr, "usage: %s %s [train/test/valid/demo/map] [data] [cfg] [weights (optional)]\n", argv[0], argv[1]);
         return;
     }
@@ -2021,7 +2039,7 @@ void run_detector(int argc, char **argv)
             if (strlen(filename) > 0)
                 if (filename[strlen(filename) - 1] == 0x0d) filename[strlen(filename) - 1] = 0;
         demo(cfg, weights, thresh, hier_thresh, cam_index, filename, names, classes, avgframes, frame_skip, prefix, out_filename,
-            mjpeg_port, dontdraw_bbox, json_port, dont_show, ext_output, letter_box, time_limit_sec, http_post_host, benchmark, benchmark_layers);
+            mjpeg_port, dontdraw_bbox, json_port, dont_show, ext_output, letter_box, time_limit_sec, http_post_host, benchmark, benchmark_layers, img_sequence_dir, output_dir, &section);
 
         free_list_contents_kvp(options);
         free_list(options);
