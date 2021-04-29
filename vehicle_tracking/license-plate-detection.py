@@ -44,10 +44,10 @@ if __name__ == '__main__':
 
             ratio = float(max(Ivehicle.shape[:2]))/min(Ivehicle.shape[:2])
             side  = int(ratio*288.)
-            bound_dim = min(side + (side%(2**4)),608)
+            bound_dim = min(side + (side & 0x10), 608)
             print("\t\tBound dim: %d, ratio: %f" % (bound_dim,ratio))
 
-            Llp,LlpImgs,_ = detect_lp(wpod_net,im2single(Ivehicle),bound_dim,2**4,(240,80),lp_threshold)
+            Llp,LlpImgs,_ = detect_lp(wpod_net,im2single(Ivehicle),bound_dim,0x10,(240,80),lp_threshold)
 
             if len(LlpImgs):
                 Ilp = LlpImgs[0]
