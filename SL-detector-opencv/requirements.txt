@@ -1,0 +1,5 @@
+numpy
+Pillow
+opencv_python==4.5.1
+opencv_contrib_python==4.5.1
+matplotlib==3.3
