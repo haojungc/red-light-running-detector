@@ -8,6 +8,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
+#include <stdbool.h>
 #include <string>
 #include <vector>
 #include <fstream>
@@ -903,14 +904,13 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
         sprintf(frame_name, "%s/out%03d.png", img_sequence_dir, frame_id);
         imwrite(frame_name, show_img->clone());
 
-        static std::ofstream outFrame("redframe.txt", std::ios::app);   // txt file for detected frame
+        bool has_red_light = false;
         for (i = 0; i < num; ++i) {
             char labelstr[4096] = { 0 };
             int class_id = -1;
             for (j = 0; j < classes; ++j) {
                 int show = strncmp(names[j], "dont_show", 9);
                 if (dets[i].prob[j] > thresh && show) {
-                    outFrame << frame_id << endl;
                     if (class_id < 0) {
                         strcat(labelstr, names[j]);
                         class_id = j;
@@ -929,8 +929,12 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
                         strcat(labelstr, names[j]);
                         printf(", %s: %.0f%% ", names[j], dets[i].prob[j] * 100);
                     }
+
+                    if (class_id == 0)
+                        has_red_light = true;
                 }
             }
+
             if (class_id >= 0) {
                 int width = std::max(1.0f, show_img->rows * .002f);
 
@@ -1028,6 +1032,19 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
                 // cv::FONT_HERSHEY_COMPLEX_SMALL, cv::FONT_HERSHEY_SIMPLEX
             }
         }
+
+        /* Output traffic light signal to file */
+        std::ofstream outFrame("redframe.txt", std::ios::app);
+        if (num == 0) {
+            fprintf(stderr, "Unknown class\n");
+            outFrame << 0 << endl;
+        } else if (has_red_light) {
+            outFrame << 1 << endl; // red
+        } else {
+            outFrame << 0 << endl; // green
+        }
+        outFrame.close();
+
         if (ext_output) {
             fflush(stdout);
         }
