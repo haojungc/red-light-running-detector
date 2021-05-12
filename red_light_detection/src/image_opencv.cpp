@@ -910,7 +910,6 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
             for (j = 0; j < classes; ++j) {
                 int show = strncmp(names[j], "dont_show", 9);
                 if (dets[i].prob[j] > thresh && show) {
-                    outFrame << frame_id << endl;
                     if (class_id < 0) {
                         strcat(labelstr, names[j]);
                         class_id = j;
@@ -933,6 +932,17 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
             }
             if (class_id >= 0) {
                 int width = std::max(1.0f, show_img->rows * .002f);
+
+                if (class_id == 0) {
+                    // red
+                    outFrame << 1 << endl;
+                } else if (class_id == 1) {
+                    // green
+                    outFrame << 0 << endl;
+                } else {
+                    fprintf(stderr, "Unknown class %d\n", class_id);
+                    outFrame << -1 << endl;
+                }
 
                 //if(0){
                 //width = pow(prob, 1./2.)*10+1;
@@ -1028,6 +1038,9 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
                 // cv::FONT_HERSHEY_COMPLEX_SMALL, cv::FONT_HERSHEY_SIMPLEX
             }
         }
+
+        outFrame.close();
+
         if (ext_output) {
             fflush(stdout);
         }
