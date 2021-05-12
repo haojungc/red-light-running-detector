@@ -69,11 +69,11 @@ kCount = 0
 
 # -------CREATE VIDEO WRITER------------------
 # Define the codec and create VideoWriter object
+odir = sys.argv[4]
 fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
 videoOut = cv2.VideoWriter(odir + "output2.avi",fourcc, 20.0, (1920,1080))
 
 # -------Open output text file-----------------------
-odir = sys.argv[4]
 SL_file = open(odir + "SL_ycord.txt", 'w')
 # -------Read yolo bbox text file from yolo darknet------
 bdir = sys.argv[2]
