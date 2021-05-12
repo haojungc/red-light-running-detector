@@ -18,6 +18,26 @@ import statistics # TO use mode function
 pi = 3.14159265358979323846
 fRate = 20
 kThres = 60
+
+RL_file = sys.argv[3]	# get redlight start end frame information 
+startFrame=int(RL_file.readline())
+endFrame=int(RL_file.readline())
+RL_file.close()
+
+
+# ----------------noline fucntion----------------------
+def noline(kalman ,kCount, im, frameNum, SL_file, videoOut):
+    if frameNum <= endFrame and frameNum >= startFrame:
+    	SL_file.write("0" + "\n")
+	kCount += 1
+    if kCount > kThres:
+        kalman.statePost = np.array( [im.shape[0]*0.50, 0] ).reshape((2,1))
+        kCount = 0
+	videoOut.write(im)
+#    cv2.imshow("Lane lines on image", im)
+#    if cv2.waitKey(fRate) >= 0:
+#        break
+
 #----------------Get Video-----------------
 cap = cv2.VideoCapture(sys.argv[1])
 if not cap.isOpened():
@@ -25,7 +45,7 @@ if not cap.isOpened():
 
 flag, im = cap.read()
 im = cv2.resize(im, None, im, 1920.0/im.shape[1], 1920.0/im.shape[1]);
-imshape = im.shape
+
 #plt.figure(1)
 #plt.imshow(im)
 #plt.title(test_image_names[0])
@@ -45,7 +65,6 @@ kalman.errorCovPost = 1. * np.ones((2, 2))
 #cv2.setIdentity( kalman.errorCovPost, 1.			)
 
 kalman.statePost = np.array( [im.shape[0]*0.5, 0.] ).reshape((2,1))
-
 kCount = 0
 
 # -------CREATE VIDEO WRITER------------------
@@ -53,18 +72,20 @@ kCount = 0
 fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
 videoOut = cv2.VideoWriter('output2.avi',fourcc, 20.0, (1920,1080))
 
-# -------Read bbox text file from yolo darknet------
+# -------Open output text file-----------------------
+SL_file = open('SL_ycord.txt', write)
+# -------Read yolo bbox text file from yolo darknet------
 bdir = sys.argv[2]
 
 while flag:
 	flag, im = cap.read()
 	if not flag:
 		break
-	frameNum = cap.get(cv2.CAP_PROP_POS_FRAMES);
-	cv2.imshow("Original image", im)
-	cv2.waitKey(fRate)
+	frameNum = cap.get(cv2.CAP_PROP_POS_FRAMES)
+	#cv2.imshow("Original image", im)
+	#cv2.waitKey(fRate)
     # -----------------resize-----------------------
-	im = cv2.resize(im, None, im, 1920.0/im.shape[1], 1920.0/im.shape[1]);
+	im = cv2.resize(im, None, im, 1920.0/im.shape[1], 1920.0/im.shape[1])
 
     # -------------GREYSCALE IMAGE---------------
     # Grayscale one color channel
@@ -75,7 +96,7 @@ while flag:
     #plt.title('Greyscaled image')
 
     #---------------Erosion IMAGE------------------
-	erosion_size = 1;
+	erosion_size = 1
 	element = cv2.getStructuringElement(cv2.MORPH_CROSS, (2*erosion_size + 1, 2*erosion_size+1), (erosion_size, erosion_size))
 	erosIm = cv2.erode(grayIm, element)
 
@@ -86,8 +107,8 @@ while flag:
     # Can also use average, median, and bilarteral blurring techniques
 	kernel_size = 5; # bigger kernel = more smoothing
 	smoothedIm = cv2.GaussianBlur(grayIm, (kernel_size, kernel_size), 0)
-	cv2.imshow("Smoothed image", smoothedIm)
-	cv2.waitKey(fRate)
+	#cv2.imshow("Smoothed image", smoothedIm)
+	#cv2.waitKey(fRate)
     #plt.figure(3)
     #plt.imshow(smoothedIm,cmap='gray')
     #plt.title('Smoothed image')
@@ -130,8 +151,8 @@ while flag:
 	# cv2.fillPoly(mask, bVertices, 255 ) replaced with forloop since overlay vertices would reverse the color
 	for vertice in bVertices:
 		cv2.fillPoly(mask, [vertice], 0 )
-	cv2.imshow("mask", mask)
-	cv2.waitKey(fRate)
+#	cv2.imshow("mask", mask)
+#	cv2.waitKey(fRate)
 
 	#------------------Threshold-----------------------
 	mean, stddev = cv2.meanStdDev(grayIm, mask = mask)
@@ -139,8 +160,8 @@ while flag:
 	#print(int(mean[0]+1*stddev[0])) # for debugging
 	ret,thresIm = cv2.threshold(smoothedIm, int(mean[0]+1.3*stddev[0]), 0, cv2.THRESH_TOZERO)
 	#ret,thresIm = cv2.threshold(smoothedIm, 10, 0, cv2.THRESH_TOZERO)
-	cv2.imshow("Threshold image", thresIm)
-	cv2.waitKey(fRate)
+	#cv2.imshow("Threshold image", thresIm)
+	#cv2.waitKey(fRate)
 
     #-------------EDGE DETECTION---------------------
     # finds gradient in x,y direction, gradient direction is perpendicular to edges
@@ -154,10 +175,10 @@ while flag:
     #plt.figure(4)
     #implot = plt.imshow(edgesIm,cmap='gray')
 
-    #plt.scatter([0],[imshape[0]])
+    #plt.scatter([0],[im.shape[0]])
     #plt.scatter([465],[320])
     #plt.scatter([475],[320])
-    #plt.scatter([imshape[1]],[imshape[0]])
+    #plt.scatter([im.shape[1]],[im.shape[0]])
 
     #plt.title('Edge Detection')
 
@@ -165,8 +186,8 @@ while flag:
     #----------------------APPLY MASK TO IMAGE-------------------------------
     # create image only where mask and edge Detection image are the same
 	maskedIm = cv2.bitwise_and(edgesIm, mask)
-	cv2.imshow("Masked Image", maskedIm);
-	cv2.waitKey(fRate);
+	#cv2.imshow("Masked Image", maskedIm)
+	#cv2.waitKey(fRate)
 
     # Plot output of mask
     #plt.figure(6)
@@ -235,14 +256,16 @@ while flag:
 		print(horizonLines)
 
 		if addedLine == False:
-			kCount += 1;
-			if kCount > kThres:
-				kalman.statePost = np.array( [im.shape[0]*0.50, 0] ).reshape((2,1))
-				kCount = 0
-			print("Not enough qualified lines found")
-			cv2.imshow("Lane lines on image", im)
-			if cv2.waitKey(fRate) >= 0:
-				break
+            noline(kalman ,kCount, im, frameNum, SL_file, videoOut)
+#			kCount += 1
+#			if kCount > kThres:
+#				kalman.statePost = np.array( [im.shape[0]*0.50, 0] ).reshape((2,1))
+#				kCount = 0
+#			print("Not enough qualified lines found")
+#			videoOut.write(im)
+#			cv2.imshow("Lane lines on image", im)
+#			if cv2.waitKey(fRate) >= 0:
+#				break
 			continue
 
 		# ------------------Calculate the most frequent slope-------------------------
@@ -254,15 +277,16 @@ while flag:
 			addedLine = True
 
 		if addedLine == False:
-			kCount += 1
-			if kCount > kThres:
-				kalman.statePost = np.array( [im.shape[0]*0.50, 0] ).reshape((2,1))
-				kCount = 0
-			print("Not enough non-zero-angle lines found")
-			videoOut.write(im);
-			cv2.imshow("Lane lines on image", im)
-			if cv2.waitKey(fRate) >= 0:
-				break
+            noline(kalman ,kCount, im, frameNum, SL_file, videoOut)
+#			kCount += 1
+#			if kCount > kThres:
+#		   	kalman.statePost = np.array( [im.shape[0]*0.50, 0] ).reshape((2,1))
+#			kCount = 0
+#		    print("Not enough non-zero-angle lines found")
+#			videoOut.write(im);
+#			cv2.imshow("Lane lines on image", im)
+#			if cv2.waitKey(fRate) >= 0:
+#				break
 			continue
 
 		angleMode = statistics.mode(horizonAngles)
@@ -284,7 +308,7 @@ while flag:
 		yIntercepts = []
 		for angleGoodLine in angleGoodLines:
 			x1 = angleGoodLine[0]
-			y1 = imshape[0] - angleGoodLine[1]
+			y1 = im.shape[0] - angleGoodLine[1]  # change the direction of y
 			slope = angleGoodLine[4]
 			yIntercept = y1 - slope*x1
 			if math.isnan(yIntercept) == 0:
@@ -302,7 +326,7 @@ while flag:
 		slope = math.tan(angleMean * pi/180)
 		x1 = 0
 		y1 = y_k[0]
-		x2 = imshape[1]
+		x2 = im.shape[1]
 		y2 = y1 + (x2-x1)*slope
 
 		x1 = int(x1 + .5)	# round
@@ -316,25 +340,31 @@ while flag:
 		print(y1)
 		print(y2)
 
-		cv2.line(stopLineIm,(x1,imshape[0]-y1), (x2,imshape[0]-y2), (0,255,0), 4) # plot line on color image
-		videoOut.write(stopLineIm);
-		cv2.imshow("Lane lines on image", stopLineIm)
-		if cv2.waitKey(fRate) >= 0:
-			break
+        if frameNum <= endFrame and frameNum >= startFrame:
+            SL_file.write(str(im.shape[0]-y1) + "\n")
+
+		cv2.line(stopLineIm,(x1,im.shape[0]-y1), (x2,im.shape[0]-y2), (0,255,0), 4) # plot line on color image
+		videoOut.write(stopLineIm)
+		#cv2.imshow("Lane lines on image", stopLineIm)
+		#if cv2.waitKey(fRate) >= 0:
+		#	break
 
 	else:
-		kCount += 1
-		if kCount > kThres:
-			kalman.statePost = np.array( [im.shape[0]*0.50, 0] ).reshape((2,1))
-			kCount = 0
-		print("Not enough hough lines found")
-		videoOut.write(im);
-		cv2.imshow("Lane lines on image", im)
-		if cv2.waitKey(fRate) >= 0:
-			break
+		noline(kalman ,kCount, im, frameNum, SL_file, videoOut)
+#		kCount += 1
+#		if kCount > kThres:
+#			kalman.statePost = np.array( [im.shape[0]*0.50, 0] ).reshape((2,1))
+#			kCount = 0
+#		print("Not enough hough lines found")
+#		videoOut.write(im)
+#		cv2.imshow("Lane lines on image", im)
+#		if cv2.waitKey(fRate) >= 0:
+#			break
 
-# Release text file
+# Release yolo text file
 btext.close()
+# Release written SL y cord text file
+SL_file.close()
 # Release output video
 videoOut.release()
 # Release input video
