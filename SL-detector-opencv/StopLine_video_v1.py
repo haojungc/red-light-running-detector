@@ -28,7 +28,7 @@ RL_file.close()
 # ----------------noline fucntion----------------------
 def noline(kalman ,kCount, y_k, im, frameNum, SL_file, videoOut):
     if frameNum <= endFrame and frameNum >= startFrame:
-        SL_file.write(str(round(y_k[0][0],0)) + "\n")
+        SL_file.write(str( im.shape[0] - int(y_k[0][0] + .5) ) + "\n")
         kCount += 1
     if kCount > kThres:
         kalman.statePost = np.array( [im.shape[0]*0.50, 0] ).reshape((2,1))
