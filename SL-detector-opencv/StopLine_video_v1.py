@@ -26,14 +26,14 @@ endFrame=int(RL_file.readline())
 RL_file.close()
 
 # ----------------noline fucntion----------------------
-def noline(kalman ,kCount, im, frameNum, SL_file, videoOut):
+def noline(kalman ,kCount, y_k, im, frameNum, SL_file, videoOut):
     if frameNum <= endFrame and frameNum >= startFrame:
-        SL_file.write("0" + "\n")
+        SL_file.write(y_k + "\n")
         kCount += 1
     if kCount > kThres:
         kalman.statePost = np.array( [im.shape[0]*0.50, 0] ).reshape((2,1))
         kCount = 0
-        videoOut.write(im)
+    videoOut.write(im)
 #    cv2.imshow("Lane lines on image", im)
 #    if cv2.waitKey(fRate) >= 0:
 #        break
@@ -253,7 +253,7 @@ while flag:
         print(horizonLines)
 
         if addedLine == False:
-            noline(kalman ,kCount, im, frameNum, SL_file, videoOut)
+            noline(kalman ,kCount, y_k, im, frameNum, SL_file, videoOut)
 #            kCount += 1
 #            if kCount > kThres:
 #                kalman.statePost = np.array( [im.shape[0]*0.50, 0] ).reshape((2,1))
@@ -275,7 +275,7 @@ while flag:
 #            addedLine = True
 
 #        if addedLine == False:
-#            noline(kalman ,kCount, im, frameNum, SL_file, videoOut)
+#            noline(kalman ,kCount, y_k, im, frameNum, SL_file, videoOut)
 #            kCount += 1
 #            if kCount > kThres:
 #                kalman.statePost = np.array( [im.shape[0]*0.50, 0] ).reshape((2,1))
@@ -357,7 +357,7 @@ while flag:
         #    break
 
     else:
-        noline(kalman ,kCount, im, frameNum, SL_file, videoOut)
+        noline(kalman ,kCount, y_k, im, frameNum, SL_file, videoOut)
 #        kCount += 1
 #        if kCount > kThres:
 #            kalman.statePost = np.array( [im.shape[0]*0.50, 0] ).reshape((2,1))
