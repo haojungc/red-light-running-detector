@@ -903,7 +903,7 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
         sprintf(frame_name, "%s/out%03d.png", img_sequence_dir, frame_id);
         imwrite(frame_name, show_img->clone());
 
-        static std::ofstream outFrame("redframe.txt", std::ios::app);   // txt file for detected frame
+        std::ofstream outFrame("redframe.txt", std::ios::app);   // txt file for detected frame
         for (i = 0; i < num; ++i) {
             char labelstr[4096] = { 0 };
             int class_id = -1;
