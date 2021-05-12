@@ -8,6 +8,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
+#include <stdbool.h>
 #include <string>
 #include <vector>
 #include <fstream>
@@ -907,6 +908,7 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
         for (i = 0; i < num; ++i) {
             char labelstr[4096] = { 0 };
             int class_id = -1;
+            bool has_red_light = false;
             for (j = 0; j < classes; ++j) {
                 int show = strncmp(names[j], "dont_show", 9);
                 if (dets[i].prob[j] > thresh && show) {
@@ -928,14 +930,17 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
                         strcat(labelstr, names[j]);
                         printf(", %s: %.0f%% ", names[j], dets[i].prob[j] * 100);
                     }
+
+                    if (class_id == 0)
+                        has_red_light = true;
                 }
             }
 
             /* Output traffic light signal to file */
-            if (class_id == 0) {
+            if (has_red_light) {
                 // red
                 outFrame << 1 << endl;
-            } else if (class_id == 1) {
+            } else if (class_id != -1) {
                 // green
                 outFrame << 0 << endl;
             } else {
