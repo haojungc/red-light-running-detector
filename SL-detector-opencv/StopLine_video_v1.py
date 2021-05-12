@@ -70,7 +70,7 @@ kCount = 0
 # -------CREATE VIDEO WRITER------------------
 # Define the codec and create VideoWriter object
 fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
-videoOut = cv2.VideoWriter('output2.avi',fourcc, 20.0, (1920,1080))
+videoOut = cv2.VideoWriter(odir + "output2.avi",fourcc, 20.0, (1920,1080))
 
 # -------Open output text file-----------------------
 odir = sys.argv[4]
