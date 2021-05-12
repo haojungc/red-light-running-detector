@@ -1037,7 +1037,7 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
         std::ofstream outFrame("redframe.txt", std::ios::app);
         if (num == 0) {
             fprintf(stderr, "Unknown class\n");
-            outFrame << -1 << endl;
+            outFrame << 0 << endl;
         } else if (has_red_light) {
             outFrame << 1 << endl; // red
         } else {
