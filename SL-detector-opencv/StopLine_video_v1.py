@@ -289,7 +289,7 @@ while flag:
 
         angleMode_t = stats.find_repeats(horizonAngles)
         angleMode = float(angleMode_t[0][0])
-        print(angleMode[0][0])
+        print(angleMode)
         print("hello")
         #-----------------GET LINE ANGLE AVERAGES-----------------------
         angleGoodLines = []
@@ -313,8 +313,8 @@ while flag:
                 yInter_bin = round(yIntercept/5,0) * 5
                 yIntercepts.append(yInter_bin) # round to make bins of yintercept
         
-            yIntMode = stats.find_repeats(yIntercepts)
-        
+        yIntMode_t = stats.find_repeats(yIntercepts)
+        yIntMode = float(yIntMode_t[0][0])
         print(yIntMode)
         # ------------------------Kalman Filter-------------------------
         y_k = kalman.predict()
