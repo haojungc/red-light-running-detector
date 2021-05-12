@@ -930,19 +930,21 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
                     }
                 }
             }
+
+            /* Output traffic light signal to file */
+            if (class_id == 0) {
+                // red
+                outFrame << 1 << endl;
+            } else if (class_id == 1) {
+                // green
+                outFrame << 0 << endl;
+            } else {
+                fprintf(stderr, "Unknown class %d\n", class_id);
+                outFrame << -1 << endl;
+            }
+
             if (class_id >= 0) {
                 int width = std::max(1.0f, show_img->rows * .002f);
-
-                if (class_id == 0) {
-                    // red
-                    outFrame << 1 << endl;
-                } else if (class_id == 1) {
-                    // green
-                    outFrame << 0 << endl;
-                } else {
-                    fprintf(stderr, "Unknown class %d\n", class_id);
-                    outFrame << -1 << endl;
-                }
 
                 //if(0){
                 //width = pow(prob, 1./2.)*10+1;
