@@ -308,7 +308,8 @@ while flag:
             slope = angleGoodLine[4]
             yIntercept = y1 - slope*x1
             if math.isnan(yIntercept) == 0:
-                yIntercepts.append(round(yIntercept,1)) # round to make bins of yintercept
+                yInter_bin = round(yIntercept/5,0) * 5
+                yIntercepts.append(yInter_bin) # round to make bins of yintercept
         try:
             yIntMode = statistics.mode(yIntercepts)
         except:
