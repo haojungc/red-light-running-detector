@@ -313,6 +313,7 @@ while flag:
                 yInter_bin = round(yIntercept/5,0) * 5
                 yIntercepts.append(yInter_bin) # round to make bins of yintercept
         
+        print(len(yIntercepts))
         yIntMode_t = stats.find_repeats(yIntercepts)
         yIntMode = float(yIntMode_t[0][0])
         print(yIntMode)
