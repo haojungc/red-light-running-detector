@@ -20,7 +20,7 @@ fRate = 20
 kThres = 60
 
 RLloc = sys.argv[3]
-RL_file.open(RLloc, 'r')# get redlight start end frame information 
+RL_file = open(RLloc, 'r')# get redlight start end frame information 
 startFrame=int(RL_file.readline())
 endFrame=int(RL_file.readline())
 RL_file.close()
