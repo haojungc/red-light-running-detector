@@ -19,7 +19,8 @@ pi = 3.14159265358979323846
 fRate = 20
 kThres = 60
 
-RL_file = sys.argv[3]	# get redlight start end frame information 
+RLloc = sys.argv[3]
+RL_file.open(RLloc, 'r')# get redlight start end frame information 
 startFrame=int(RL_file.readline())
 endFrame=int(RL_file.readline())
 RL_file.close()
@@ -72,7 +73,8 @@ fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
 videoOut = cv2.VideoWriter('output2.avi',fourcc, 20.0, (1920,1080))
 
 # -------Open output text file-----------------------
-SL_file = open('SL_ycord.txt', write)
+odir = sys.argv[4]
+SL_file = open(odir + "SL_ycord.txt", 'w')
 # -------Read yolo bbox text file from yolo darknet------
 bdir = sys.argv[2]
 
