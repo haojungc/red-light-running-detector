@@ -14,7 +14,7 @@ import math
 import cv2
 import os
 import sys  # To get command line arguments
-import statistics # TO use mode function
+from scipy import stats  # TO use mode function
 pi = 3.14159265358979323846
 fRate = 20
 kThres = 60
@@ -270,7 +270,8 @@ while flag:
 #        addedLine = False
         for horizonLine in horizonLines:
 #            if horizonLine[5] != 0:
-            horizonAngles.append(horizonLine[5])
+            horLine_bin = round(horizonLine[5]*2)/2 # create bins
+            horizonAngles.append(horLine_bin)
 #            addedLine = True
 
 #        if addedLine == False:
@@ -286,8 +287,9 @@ while flag:
 #                break
 #            continue
 
-        angleMode = statistics.mode(horizonAngles)
-        print(angleMode)
+        angleMode_t = stats.find_repeats(horizonAngles)
+        angleMode = float(angleMode_t[0][0])
+        print(angleMode[0][0])
         print("hello")
         #-----------------GET LINE ANGLE AVERAGES-----------------------
         angleGoodLines = []
@@ -310,11 +312,9 @@ while flag:
             if math.isnan(yIntercept) == 0:
                 yInter_bin = round(yIntercept/5,0) * 5
                 yIntercepts.append(yInter_bin) # round to make bins of yintercept
-        try:
-            yIntMode = statistics.mode(yIntercepts)
-        except:
-            print('statistics.StatisticsError: no unique mode')
-            yIntMode = yIntercepts[0]
+        
+            yIntMode = stats.find_repeats(yIntercepts)
+        
         print(yIntMode)
         # ------------------------Kalman Filter-------------------------
         y_k = kalman.predict()
