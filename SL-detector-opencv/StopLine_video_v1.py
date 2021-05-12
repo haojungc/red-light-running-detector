@@ -136,11 +136,14 @@ while flag:
         tmp = line.split()
         for i in range(5):
             tmp[i] = float(tmp[i])
+            print(type(tmp[i]))
+            print('im.shape')
+            print(type(im.shape[1]))
             ratio = 0.8
-            pt1 = [im.shape[1]*(tmp[1]-ratio*tmp[3]/2), im.shape[0]*(tmp[2]-ratio*tmp[4]/2)]
-            pt2 = [im.shape[1]*(tmp[1]+ratio*tmp[3]/2), im.shape[0]*(tmp[2]-ratio*tmp[4]/2)]
-            pt3 = [im.shape[1]*(tmp[1]+ratio*tmp[3]/2), im.shape[0]*(tmp[2]+ratio*tmp[4]/2)]
-            pt4 = [im.shape[1]*(tmp[1]-ratio*tmp[3]/2), im.shape[0]*(tmp[2]+ratio*tmp[4]/2)]
+            pt1 = [ im.shape[1]*(tmp[1]-ratio*tmp[3]/2), im.shape[0]*(tmp[2]-ratio*tmp[4]/2) ]
+            pt2 = [ im.shape[1]*(tmp[1]+ratio*tmp[3]/2), im.shape[0]*(tmp[2]-ratio*tmp[4]/2) ]
+            pt3 = [ im.shape[1]*(tmp[1]+ratio*tmp[3]/2), im.shape[0]*(tmp[2]+ratio*tmp[4]/2) ]
+            pt4 = [ im.shape[1]*(tmp[1]-ratio*tmp[3]/2), im.shape[0]*(tmp[2]+ratio*tmp[4]/2) ]
             mVs.append([pt1,pt2,pt3,pt4])
 
     bVertices = np.array(mVs, dtype=np.int32)
