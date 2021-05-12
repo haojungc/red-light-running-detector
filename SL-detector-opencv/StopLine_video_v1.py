@@ -308,9 +308,12 @@ while flag:
             slope = angleGoodLine[4]
             yIntercept = y1 - slope*x1
             if math.isnan(yIntercept) == 0:
-                yIntercepts.append(yIntercept)
-
-        yIntMode = statistics.mode(yIntercepts)
+                yIntercepts.append(round(yIntercept,1)) # round to make bins of yintercept
+        try:
+            yIntMode = statistics.mode(yIntercepts)
+        except:
+            print('statistics.StatisticsError: no unique mode')
+            yIntMode = yIntercepts[0]
         print(yIntMode)
         # ------------------------Kalman Filter-------------------------
         y_k = kalman.predict()
