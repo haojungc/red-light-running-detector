@@ -904,11 +904,10 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
         sprintf(frame_name, "%s/out%03d.png", img_sequence_dir, frame_id);
         imwrite(frame_name, show_img->clone());
 
-        std::ofstream outFrame("redframe.txt", std::ios::app);   // txt file for detected frame
+        bool has_red_light = false;
         for (i = 0; i < num; ++i) {
             char labelstr[4096] = { 0 };
             int class_id = -1;
-            bool has_red_light = false;
             for (j = 0; j < classes; ++j) {
                 int show = strncmp(names[j], "dont_show", 9);
                 if (dets[i].prob[j] > thresh && show) {
@@ -934,18 +933,6 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
                     if (class_id == 0)
                         has_red_light = true;
                 }
-            }
-
-            /* Output traffic light signal to file */
-            if (has_red_light) {
-                // red
-                outFrame << 1 << endl;
-            } else if (class_id != -1) {
-                // green
-                outFrame << 0 << endl;
-            } else {
-                fprintf(stderr, "Unknown class %d\n", class_id);
-                outFrame << -1 << endl;
             }
 
             if (class_id >= 0) {
@@ -1046,6 +1033,16 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
             }
         }
 
+        /* Output traffic light signal to file */
+        std::ofstream outFrame("redframe.txt", std::ios::app);
+        if (num == 0) {
+            fprintf(stderr, "Unknown class\n");
+            outFrame << -1 << endl;
+        } else if (has_red_light) {
+            outFrame << 1 << endl; // red
+        } else {
+            outFrame << 0 << endl; // green
+        }
         outFrame.close();
 
         if (ext_output) {
