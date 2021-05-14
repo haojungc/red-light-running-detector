@@ -60,7 +60,10 @@ tracker = create_tracker(tracker_type)
 # Read video
 input_video = cv2.VideoCapture(video_dir)
 fps = input_video.get(cv2.CAP_PROP_FPS)
-size = (int(input_video.get(cv2.CAP_PROP_FRAME_WIDTH)), int(input_video.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+v_width = float(input_video.get(cv2.CAP_PROP_FRAME_WIDTH))
+v_height = float(input_video.get(cv2.CAP_PROP_FRAME_HEIGHT))
+resize_ratio = 1920.0/v_height
+size = ( int(resize_ratio * v_width), int(resize_ratio * v_height) ) #the size after the resize later
 
 # Write video
 fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
@@ -95,6 +98,7 @@ f = open('%s/target_bboxes.txt' % (output_dir), 'w')
 while True:
     # Read a frame
     ret, frame = input_video.read()
+    frame = cv2.resize(frame, None, frame, 1920.0/frame.shape[1], 1920.0/frame.shape[1])
     frame_count += 1
 
     if not ret:
