@@ -45,7 +45,7 @@ violateFrame = -1
 violateCount = 0
 slots_length = 10
 judge_slots = [] # scan diff[] with 10 slot ex []
-for i in range(frameCount) - 2*slots_length + 1:
+for i in range(frameCount - 2*slots_length + 1):
     judge_slots_pre = diff[i: i+slots_length]
     judge_slots_pos = diff[i+slots_length+1: i+2*slots_length+1]
     pre_sum = 0
