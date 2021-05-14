@@ -63,7 +63,7 @@ for i in range(frameCount - 2*slots_length + 1):
     else:
         violateCount = 0
 
-    if violateCount > 20:
+    if violateCount > 5:
         violateFrame = RL_startFrame + (i + slots_length)
         print('found target vehicle violating law!')
         break
