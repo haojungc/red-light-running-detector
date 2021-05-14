@@ -65,6 +65,7 @@ for i in range(frameCount - 2*slots_length + 1):
 
     if violateCount > 20:
         violateFrame = RL_startFrame + (i + slots_length)
+        print('found target vehicle violating law!')
         break
     
 
@@ -84,8 +85,10 @@ while flag:
         videoOut.write(drawIm)
     else:
         videoOut.write(im)
-    
+
 # Release output video
 videoOut.release()
 # Release input video
 cap.release()
+
+print('program ended succesfully')
