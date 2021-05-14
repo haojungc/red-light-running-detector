@@ -13,7 +13,10 @@ fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
 videoOut = cv2.VideoWriter(odir + "judge_result.avi",fourcc, 20.0, (1920,1080))
 
 #------ info preprocess--------
-TV_file = open( sys.argv[3], 'r')
+try:
+    TV_file = open( sys.argv[3], 'r')
+except:
+    print('no TV_file available -> no target license plate detected within the red light interval')
 SL_file = open( sys.argv[2], 'r')
 RLstartFrame = 0
 frameCount = 0
@@ -82,5 +85,7 @@ while flag:
     else:
         videoOut.write(im)
     
-
-
+# Release output video
+videoOut.release()
+# Release input video
+cap.release()
