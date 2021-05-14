@@ -72,7 +72,7 @@ for i in range(frameCount - 2*slots_length + 1):
 # ------- Output video ---------
 flag, im = cap.read()
 while flag:
-    if violateCount == -1:
+    if violateFrame == -1:
         print('no red light violation found')
         break
     flag, im = cap.read()  
