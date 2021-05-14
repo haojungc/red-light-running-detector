@@ -38,4 +38,8 @@ if __name__ == '__main__':
             break
     
     with open(output_filename, 'w', encoding='utf-8') as file:
-        file.write('%d %d' % (frame_start, frame_end))
+        file.write('%d\n%d' % (frame_start, frame_end))
+
+    print('red light interval (frame_id):')
+    print('  start: %d' % (frame_start))
+    print('  end: %d' % (frame_end))
