@@ -44,7 +44,7 @@ if not cap.isOpened():
     cout << "Could not open or find the video" << endl
 
 flag, im = cap.read()
-im = cv2.resize(im, None, im, 1920.0/im.shape[1], 1920.0/im.shape[1]);
+im = cv2.resize(im, None, im, 1920.0/im.shape[1], 1920.0/im.shape[1])
 
 #plt.figure(1)
 #plt.imshow(im)
@@ -151,8 +151,8 @@ while flag:
     # cv2.fillPoly(mask, bVertices, 255 ) replaced with forloop since overlay vertices would reverse the color
     for vertice in bVertices:
         cv2.fillPoly(mask, [vertice], 0 )
-#        cv2.imshow("mask", mask)
-#        cv2.waitKey(fRate)
+    #cv2.imshow("mask", mask)
+    #cv2.waitKey(fRate)
 
     #------------------Threshold-----------------------
     mean, stddev = cv2.meanStdDev(grayIm, mask = mask)
