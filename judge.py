@@ -28,9 +28,9 @@ for TVstr in TV_file:
     for i in range(5):
         TV_bbx[i] = int(TV_bbx[i])
 
-    TV_y = bbx[2] + bbx[4]
+    TV_y = TV_bbx[2] + TV_bbx[4]
     if frameCount == 0:
-        RL_startFrame = bbx[1]  # Record the start frameId of Red light, for video output use
+        RL_startFrame = TV_bbx[1]  # Record the start frameId of Red light, for video output use
 
     SLstr = SL_file.readline()
     SL_y = int(SLstr)
