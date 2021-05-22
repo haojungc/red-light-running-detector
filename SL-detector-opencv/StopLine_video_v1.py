@@ -127,7 +127,9 @@ while flag:
     try:
         btext = open(bdir + bfile, 'r')
     except:
+        print(bfile)
         print("could not open bbx txt file")
+        exit(1)
 
     # TODO: add open failed error detect
 
