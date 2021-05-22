@@ -65,6 +65,7 @@ kalman.errorCovPost = 1. * np.ones((2, 2))
 #cv2.setIdentity( kalman.errorCovPost, 1.			)
 
 kalman.statePost = np.array( [im.shape[0]*0.5, 0.] ).reshape((2,1))
+y_k = kalman.predict()
 kCount = 0
 
 # -------CREATE VIDEO WRITER------------------
