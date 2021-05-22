@@ -40,7 +40,7 @@ fi
 
 lp_model="data/lp-detector/wpod-net_update1.h5"
 input_file=''
-output_file='output.mp4'
+output_file=''
 img_sequence_dir='frames/'
 frame_id_start='-1'
 frame_id_end='-1'
@@ -115,7 +115,9 @@ fi
 set -e
 
 # Set output filename
-output_file=${input_file%/*/*}/$output_file
+vid_name_temp=${input_file##*/}
+vid_name=${vid_name_temp/.*/_ocr.mp4}
+output_file=${input_file%/*/*}/$vid_name
 
 # Verifies the license plate format and erases '-' from the license plate
 lp_target=$(echo "$lp_target" | sed 's/-//')
