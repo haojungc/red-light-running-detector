@@ -40,6 +40,7 @@ def noline(kalman ,kCount, y_k, im, frameNum, SL_file, videoOut):
 
 #----------------Get Video-----------------
 cap = cv2.VideoCapture(sys.argv[1])
+fps = cap.get(cv2.CAP_PROP_FPS)
 if not cap.isOpened():
     cout << "Could not open or find the video" << endl
 
@@ -72,9 +73,9 @@ kCount = 0
 # Define the codec and create VideoWriter object
 odir = sys.argv[4]
 fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-videoOut = cv2.VideoWriter(odir + "outSL.avi", fourcc, 30.0, (1920,1080))
-vidMask = cv2.VideoWriter(odir + "outMask.avi", fourcc, 30.0, (1920,1080))
-vidCan = cv2.VideoWriter(odir + "outCan.avi", fourcc, 30.0, (1920, 1080))
+videoOut = cv2.VideoWriter(odir + "outSL.avi", fourcc, fps, (1920,1080))
+vidMask = cv2.VideoWriter(odir + "outMask.avi", fourcc, fps, (1920,1080))
+vidCan = cv2.VideoWriter(odir + "outCan.avi", fourcc, fps, (1920, 1080))
 # -------Open output text file-----------------------
 SL_file = open(odir + "SL_ycord.txt", 'w')
 # -------Read yolo bbox text file from yolo darknet------
