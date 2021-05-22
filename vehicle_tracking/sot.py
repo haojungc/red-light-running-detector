@@ -62,7 +62,7 @@ input_video = cv2.VideoCapture(video_dir)
 fps = input_video.get(cv2.CAP_PROP_FPS)
 v_width = float(input_video.get(cv2.CAP_PROP_FRAME_WIDTH))
 v_height = float(input_video.get(cv2.CAP_PROP_FRAME_HEIGHT))
-resize_ratio = 1920.0/v_height
+resize_ratio = 1920.0/v_width
 size = ( int(resize_ratio * v_width), int(resize_ratio * v_height) ) #the size after the resize later
 
 # Write video
