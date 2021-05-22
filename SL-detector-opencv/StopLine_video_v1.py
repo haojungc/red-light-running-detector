@@ -71,8 +71,9 @@ kCount = 0
 # Define the codec and create VideoWriter object
 odir = sys.argv[4]
 fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
-videoOut = cv2.VideoWriter(odir + "output2.avi",fourcc, 20.0, (1920,1080))
-
+videoOut = cv2.VideoWriter(odir + "outSL.mp4", fourcc, 30.0, (1920,1080))
+vidMask = cv2.VideoWriter(odir + "outMask.mp4", fourcc, 30.0, (1920,1080))
+vidCan = cv2.VideoWriter(odir + "outCan.mp4", fourcc, 30.0, (1920, 1080))
 # -------Open output text file-----------------------
 SL_file = open(odir + "SL_ycord.txt", 'w')
 # -------Read yolo bbox text file from yolo darknet------
@@ -151,6 +152,7 @@ while flag:
     # cv2.fillPoly(mask, bVertices, 255 ) replaced with forloop since overlay vertices would reverse the color
     for vertice in bVertices:
         cv2.fillPoly(mask, [vertice], 0 )
+    vidMask.write(mask)
     #cv2.imshow("mask", mask)
     #cv2.waitKey(fRate)
 
@@ -185,6 +187,7 @@ while flag:
     #----------------------APPLY MASK TO IMAGE-------------------------------
     # create image only where mask and edge Detection image are the same
     maskedIm = cv2.bitwise_and(edgesIm, mask)
+    vidCan.write(maskedIm)
     #cv2.imshow("Masked Image", maskedIm)
     #cv2.waitKey(fRate)
 
@@ -194,7 +197,7 @@ while flag:
     #plt.title('Masked Image')
 
     #Plot masked edges image
-    maskedIm3Channel = cv2.cvtColor(maskedIm, cv2.COLOR_GRAY2BGR)
+    #maskedIm3Channel = cv2.cvtColor(maskedIm, cv2.COLOR_GRAY2BGR)
 
     #------------------------HOUGH LINES----------------------------
     rho = 2
