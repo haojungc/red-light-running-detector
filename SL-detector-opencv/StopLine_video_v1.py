@@ -70,7 +70,7 @@ kCount = 0
 # -------CREATE VIDEO WRITER------------------
 # Define the codec and create VideoWriter object
 odir = sys.argv[4]
-fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
+fourcc = cv2.VideoWriter_fourcc(*'MP4V')
 videoOut = cv2.VideoWriter(odir + "outSL.mp4", fourcc, 30.0, (1920,1080))
 vidMask = cv2.VideoWriter(odir + "outMask.mp4", fourcc, 30.0, (1920,1080))
 vidCan = cv2.VideoWriter(odir + "outCan.mp4", fourcc, 30.0, (1920, 1080))
