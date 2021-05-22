@@ -35,6 +35,7 @@ for TVstr in TV_file:
     SLstr = SL_file.readline()
     SL_y = int(SLstr)
     diff.append(SL_y - TV_y)
+    print("SL-TV diff:" str(SL_y-TV_y))
 
     frameCount = frameCount + 1
 
@@ -58,7 +59,7 @@ for i in range(frameCount - 2*slots_length + 1):
     for tmp in judge_slots_pos:
         pos_sum = pos_sum + tmp        
 
-    if pre_sum < 0 and pre_sum * pos_sum < 0: # pre_sum < 0 indicates car was before the stopline
+    if pre_sum < 0 and pos_sum > 0: # pre_sum < 0 indicates car was before the stopline
         violateCount = violateCount+1
     else:
         violateCount = 0
