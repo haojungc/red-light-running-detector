@@ -35,7 +35,7 @@ for TVstr in TV_file:
     SLstr = SL_file.readline()
     SL_y = int(SLstr)
     diff.append(SL_y - TV_y)
-    print("SL-TV diff:" + str(SL_y-TV_y))
+    print("SL-TV diff:" + str(SL_y-TV_y) + " //SL:" + str(SL_y) + " //TV:" + str(TV_y))
 
     frameCount = frameCount + 1
 
