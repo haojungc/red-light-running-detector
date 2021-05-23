@@ -383,5 +383,7 @@ btext.close()
 SL_file.close()
 # Release output video
 videoOut.release()
+vidMask.release()
+vidCan.release()
 # Release input video
 cap.release()
