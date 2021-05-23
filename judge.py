@@ -17,36 +17,44 @@ size = (int(resize_ratio*width), int(resize_ratio*height))
 fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
 videoOut = cv2.VideoWriter(odir + "judge_result.avi",fourcc, fps, size)
 
+
 #------ info preprocess--------
 try:
     TV_file = open( sys.argv[3], 'r')
 except:
     print('no TV_file available -> no target license plate detected within the red light interval')
 SL_file = open( sys.argv[2], 'r')
-RLstartFrame = 0
+
+RL_file = open( sys.argv[5], 'r')
+RL_startFrame=int(RL_file.readline())
+RL_endFrame=int(RL_file.readline())
+RL_file.close()
+
 frameCount = 0
 diff = [] # stopline and vehicle ycord diff list
-for TVstr in TV_file:
 
-    TV_bbx = TVstr.split(' ')   # frameid, top left x, top left y, width, height
+TVstr = TV_file.readline()
+TV_bbx = TVstr.split(' ')   # frameid, top left x, top left y, width, height
+for i in range(5):
+    TV_bbx[i] = int(TV_bbx[i])
+TV_startFrame = TV_bbx[0]
 
-    for i in range(5):
-        TV_bbx[i] = int(TV_bbx[i])
+for SLstr in SL_file:
+    if RL_startFrame + frameCount >= TV_startFrame:
+        TV_y = TV_bbx[2] + TV_bbx[4]
+        SL_y = int(SLstr)
+        diff.append(SL_y - TV_y)
+        print("SL-TV diff:" + str(SL_y-TV_y) + " //SL:" + str(SL_y) + " //TV:" + str(TV_y))
 
-    TV_y = TV_bbx[2] + TV_bbx[4]
-    if frameCount == 0:
-        RL_startFrame = TV_bbx[1]  # Record the start frameId of Red light, for video output use
-
-    SLstr = SL_file.readline()
-    SL_y = int(SLstr)
-    diff.append(SL_y - TV_y)
-    print("SL-TV diff:" + str(SL_y-TV_y) + " //SL:" + str(SL_y) + " //TV:" + str(TV_y))
+        TVstr = TV_file.readline()
+        TV_bbx = TVstr.split(' ')   # frameid, top left x, top left y, width, height
+        for i in range(5):
+            TV_bbx[i] = int(TV_bbx[i])
 
     frameCount = frameCount + 1
 
 SL_file.close()
 TV_file.close()
-
 
 # ------- Judge violation--------
 violateFrame = -1
@@ -66,7 +74,7 @@ for i in range(frameCount - 2*slots_length + 1):
         violateCount = violateCount+1
 
     if violateCount > 0:
-        violateFrame = RL_startFrame + (i + slots_length) # the frame in the middle slot
+        violateFrame = TV_startFrame + (i + slots_length) # the frame in the middle slot
         print('found target vehicle violating law!')
         break
     
