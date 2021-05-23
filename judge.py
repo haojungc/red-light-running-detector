@@ -12,8 +12,10 @@ width = float(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = float(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 #------ video writer-----------
 odir = sys.argv[4]
+resize_ratio = 1920/width
+size = int(resize_ratio*width, resize_ratio*height)
 fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
-videoOut = cv2.VideoWriter(odir + "judge_result.avi",fourcc, fps, (width,height))
+videoOut = cv2.VideoWriter(odir + "judge_result.avi",fourcc, fps, size)
 
 #------ info preprocess--------
 try:
@@ -77,7 +79,8 @@ while flag:
     if violateFrame == -1:
         print('no red light violation found')
         break
-    flag, im = cap.read()  
+    flag, im = cap.read()
+    im = cv2.resize(frame, None, frame, resize_ratio, resize_ratio)
     frameNum = cap.get(cv2.CAP_PROP_POS_FRAMES)
     if frameNum > start and frameNum < end :
         drawIm = im.copy()
