@@ -73,9 +73,9 @@ kCount = 0
 # Define the codec and create VideoWriter object
 odir = sys.argv[4]
 fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-videoOut = cv2.VideoWriter(odir + "outSL.avi", fourcc, fps, (1920,1080))
-vidMask = cv2.VideoWriter(odir + "outMask.avi", fourcc, fps, (1920,1080))
-vidCan = cv2.VideoWriter(odir + "outCan.avi", fourcc, fps, (1920, 1080))
+videoOut = cv2.VideoWriter(odir + "outSL.avi", fourcc, fps, (im.shape[1],im.shape[0]))
+vidMask = cv2.VideoWriter(odir + "outMask.avi", fourcc, fps, (im.shape[1],im.shape[0]))
+vidCan = cv2.VideoWriter(odir + "outCan.avi", fourcc, fps, (im.shape[1], im.shape[0]))
 # -------Open output text file-----------------------
 SL_file = open(odir + "SL_ycord.txt", 'w')
 # -------Read yolo bbox text file from yolo darknet------
