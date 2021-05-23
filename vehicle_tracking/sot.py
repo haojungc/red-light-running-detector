@@ -63,7 +63,7 @@ fps = input_video.get(cv2.CAP_PROP_FPS)
 v_width = float(input_video.get(cv2.CAP_PROP_FRAME_WIDTH))
 v_height = float(input_video.get(cv2.CAP_PROP_FRAME_HEIGHT))
 resize_ratio = 1920.0/v_width
-size = ( int(resize_ratio * v_height), int(resize_ratio * v_width) ) #the size after the resize later
+size = ( int(resize_ratio * v_width), int(resize_ratio * v_height) ) #the size after the resize later
 
 # Write video
 fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
@@ -81,10 +81,10 @@ if not ret:
     print('Error: Couldn\'t read the video')
     exit(1)
 
-center_x = int(bbox_ratio[0] * size[1])
-center_y = int(bbox_ratio[1] * size[0])
-object_width = int(bbox_ratio[2] * size[1])
-object_height = int(bbox_ratio[3] * size[0])
+center_x = int(bbox_ratio[0] * size[0])
+center_y = int(bbox_ratio[1] * size[1])
+object_width = int(bbox_ratio[2] * size[0])
+object_height = int(bbox_ratio[3] * size[1])
 
 bbox = (((center_x << 1) - object_width) >> 1, ((center_y << 1) - object_height) >> 1, object_width, object_height)
 bbox_target = bbox
@@ -98,13 +98,14 @@ f = open('%s/target_bboxes.txt' % (output_dir), 'w')
 while True:
     # Read a frame
     ret, frame = input_video.read()
-    frame = cv2.resize(frame, None, frame, 1920.0/frame.shape[1], 1920.0/frame.shape[1])
-    frame_count += 1
 
     if not ret:
         print('End tracking')
         f.close()
         break
+
+    frame = cv2.resize(frame, size)
+    frame_count += 1
 
     # Stores all the frames until `target_frame_id`.
     # If the target vehicle is found, track it backwards.
