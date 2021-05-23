@@ -48,8 +48,12 @@ for SLstr in SL_file:
 
         TVstr = TV_file.readline()
         TV_bbx = TVstr.split(' ')   # frameid, top left x, top left y, width, height
-        for i in range(5):
-            TV_bbx[i] = int(TV_bbx[i])
+        if len(TV_bbx) > 4:
+            for i in range(5):
+                TV_bbx[i] = int(TV_bbx[i])
+        else:
+            print("End of target vehicle bbx txt reached")
+            break
 
     frameCount = frameCount + 1
 
