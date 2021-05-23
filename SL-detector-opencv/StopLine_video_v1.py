@@ -299,9 +299,9 @@ while flag:
         angleMode_t = stats.find_repeats(horizonAngles)
         try:
             maxIndex_a = np.argmax(angleMode_t[1])
+            angleMode = float(angleMode_t[0][maxIndex_a])
         except:
-            maxIndex_a = 0
-        angleMode = float(angleMode_t[0][maxIndex_a])
+            angleMode = float(horizonAngles[0])     # no repeat items so just pick arbitrary one
         
         print(angleMode)
         print("hello")
@@ -332,9 +332,9 @@ while flag:
         yIntMode_t = stats.find_repeats(yIntercepts)
         try:
             maxIndex_y = np.argmax(yIntMode_t[1])
+            yIntMode = float(yIntMode_t[0][maxIndex_y])
         except:
-            maxIndex_y = 0
-        yIntMode = float(yIntMode_t[0][maxIndex_y])
+            yIntMode = float(yIntercepts[0])
         
         print(yIntMode)
         # ------------------------Kalman Filter-------------------------
