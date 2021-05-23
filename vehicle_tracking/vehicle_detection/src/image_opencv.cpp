@@ -872,6 +872,12 @@ extern "C" void save_cv_jpg(mat_cv *img_src, const char *name)
 }
 // ----------------------------------------
 
+static bool is_desired_object(char *class_name) {
+    return (strncmp(class_name, "car", 4) == 0 ||
+            strncmp(class_name, "truck", 6) == 0 ||
+            strncmp(class_name, "bus", 4) == 0 ||
+            strncmp(class_name, "motorbike", 10) == 0);
+}
 
 // ====================================================================
 // Draw Detection
@@ -927,13 +933,15 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
                         }
                         sprintf(buff, " (%2.0f%%)", dets[i].prob[j] * 100);
                         strcat(labelstr, buff);
-                        printf("%s: %.0f%% ", names[j], dets[i].prob[j] * 100);
+                        if (is_desired_object(names[j]))
+                            printf("%s: %.0f%% ", names[j], dets[i].prob[j] * 100);
                         if (dets[i].track_id) printf("(track = %d, sim = %f) ", dets[i].track_id, dets[i].sim);
                     }
                     else {
                         strcat(labelstr, ", ");
                         strcat(labelstr, names[j]);
-                        printf(", %s: %.0f%% ", names[j], dets[i].prob[j] * 100);
+                        if (is_desired_object(names[j]))
+                            printf(", %s: %.0f%% ", names[j], dets[i].prob[j] * 100);
                     }
                 }
             }
@@ -1004,10 +1012,7 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
                 color.val[2] = blue * 256;
 
                 char *class_name = names[class_id];
-                if (strncmp(class_name, "car", 4) == 0
-                    || strncmp(class_name, "truck", 6) == 0
-                    || strncmp(class_name, "bus", 4) == 0
-                    || strncmp(class_name, "motorbike", 10) == 0) {
+                if (is_desired_object(class_name)) {
                     /* Erases the last character if it is '/' */
                     int last_index = strlen(output_dir) - 1;
                     if (output_dir[last_index] == '/')
