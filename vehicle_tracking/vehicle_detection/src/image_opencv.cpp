@@ -893,6 +893,9 @@ extern "C" void draw_detections_cv_v3(mat_cv* mat, detection *dets, int num, flo
         int frame_id_end = section->frame_id_end;
         int obj_id = 0;
 
+        printf("==============\n"
+               "Frame ID: %4d\n", frame_id);
+
         /* Not in red-light section */
         if (frame_id < frame_id_start || frame_id > frame_id_end) {
             frame_id++;
