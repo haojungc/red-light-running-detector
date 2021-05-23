@@ -12,8 +12,8 @@ width = float(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = float(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 #------ video writer-----------
 odir = sys.argv[4]
-resize_ratio = 1920/width
-size = int(resize_ratio*width, resize_ratio*height)
+resize_ratio = 1920.0/width
+size = (int(resize_ratio*width), int(resize_ratio*height))
 fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
 videoOut = cv2.VideoWriter(odir + "judge_result.avi",fourcc, fps, size)
 
