@@ -126,17 +126,26 @@ while True:
             rects_until_target.append((pt1, pt2))
 
             # Tracks vehicle backwards from `ft`
+            target_missing = False
+            cons_not_found = 0
             for fr in frames_until_target[1:]:
                 # Update tracker
-                ret, bbox = tracker.update(fr)
-
-                # Stores the XY coordinates of the upper left point and the lower right point of the bbox.
-                # If the bbox is missing, store ((0,0), (0,0)) 
-                if ret and bbox[0] >= 0:
-                    (pt1, pt2) = bbox_to_pts(bbox)
-                    rects_until_target.append((pt1, pt2))
-                else:
+                if target_missing:
                     rects_until_target.append(((0, 0), (0, 0)))
+                else:
+                    ret, bbox = tracker.update(fr)
+                    # Stores the XY coordinates of the upper left point and the lower right point of the bbox.
+                    # If the bbox is missing, store ((0,0), (0,0)) 
+                    if ret and bbox[0] >= 0:
+                        cons_not_found = 0
+                        (pt1, pt2) = bbox_to_pts(bbox)
+                        rects_until_target.append((pt1, pt2))
+                    else:
+                        cons_not_found += 1
+                        if cons_not_found == 5:
+                            target_missing = True
+                        rects_until_target.append(((0, 0), (0, 0)))
+
 
             frames_until_target.reverse()
             rects_until_target.reverse() 
@@ -144,7 +153,8 @@ while True:
             # Draws rectangles on each frame
             for i in range(len(frames_until_target)):
                 (pt1, pt2) = rects_until_target[i]
-                cv2.rectangle(frames_until_target[i], pt1, pt2, (0,0,255), 5, 1) # BGR
+                if (pt1, pt2) != ((0, 0), (0, 0)):
+                    cv2.rectangle(frames_until_target[i], pt1, pt2, (0,0,255), 5, 1) # BGR
                 output_video.write(frames_until_target[i])
             
             # Reinitializes the tracker
