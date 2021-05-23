@@ -91,7 +91,6 @@ while flag:
     if violateFrame == -1:
         print('no red light violation found')
         break
-    flag, im = cap.read()
     im = cv2.resize(im, None, im, resize_ratio, resize_ratio)
     frameNum = cap.get(cv2.CAP_PROP_POS_FRAMES)
     if frameNum > start and frameNum < end :
@@ -105,7 +104,8 @@ while flag:
         cv2.putText(drawIm,'Run Red Light!', bottomLeftCornerOfText, font, fontScale, fontColor, lineType)
         videoOut.write(drawIm)
     else:
-        videoOut.write(im)
+        videoOut.write(im) 
+    flag, im = cap.read()
 
 # Release output video
 videoOut.release()
