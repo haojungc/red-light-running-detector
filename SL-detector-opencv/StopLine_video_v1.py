@@ -66,7 +66,7 @@ kalman.errorCovPost = 1. * np.ones((2, 2))
 #cv2.setIdentity( kalman.errorCovPost, 1.			)
 
 kalman.statePost = np.array( [im.shape[0]*0.5, 0.] ).reshape((2,1))
-y_k = kalman.predict()
+y_k[0][0] = 1080
 kCount = 0
 
 # -------CREATE VIDEO WRITER------------------
@@ -296,11 +296,10 @@ while flag:
 #                break
 #            continue
 
-        try:
-            angleMode_t = stats.find_repeats(horizonAngles)
-            angleMode = float(angleMode_t[0][0])
-        except:
-            angleMode = float(horizonAngles[0])
+        angleMode_t = stats.find_repeats(horizonAngles)
+        maxIndex_a = np.argmax(angleMode_t[1])
+        angleMode = float(angleMode_t[0][maxIndex_a])
+        
         print(angleMode)
         print("hello")
         #-----------------GET LINE ANGLE AVERAGES-----------------------
@@ -326,14 +325,17 @@ while flag:
                 yIntercepts.append(yInter_bin) # round to make bins of yintercept
         
         print(len(yIntercepts))
-        try:
-            yIntMode_t = stats.find_repeats(yIntercepts)
-            yIntMode = float(yIntMode_t[0][0])
-        except:
-            yIntMode = float(yIntercepts[0])
+        
+        yIntMode_t = stats.find_repeats(yIntercepts)
+        maxIndex_y = np.argmax(yIntMode_t[1])
+        yIntMode = float(yIntMode_t[0][maxIndex_y])
+        
         print(yIntMode)
         # ------------------------Kalman Filter-------------------------
         y_k = kalman.predict()
+        print("y_k.....................")
+        print(y_k)
+        print("........................")
         z_k = np.array( [yIntMode] )
         kalman.correct(z_k)
 
