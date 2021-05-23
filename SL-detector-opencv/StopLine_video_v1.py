@@ -319,12 +319,16 @@ while flag:
         # -----------------Calculate the most frequent y coord-------------------------
         yIntercepts = []
         for angleGoodLine in angleGoodLines:
+            print("angleGoodLine Array---")
+            print(angleGoodLine)
+            print("---------------------")
             x1 = angleGoodLine[0]
             y1 = im.shape[0] - angleGoodLine[1]  # change the direction of y
             slope = angleGoodLine[4]
             yIntercept = y1 - slope*x1
+            print("yIntercept array" + str(yIntercept))
             if math.isnan(yIntercept) == 0:
-                yInter_bin = round(yIntercept/5,0) * 5
+                yInter_bin = round(yIntercept/5.0,0) * 5
                 yIntercepts.append(yInter_bin) # round to make bins of yintercept
         
         print(len(yIntercepts))
@@ -336,7 +340,7 @@ while flag:
         except:
             yIntMode = float(yIntercepts[0])
         
-        print(yIntMode)
+        print("y intercept mode:" + str(yIntMode))
         # ------------------------Kalman Filter-------------------------
         y_k = kalman.predict()
         print("y_k.....................")
