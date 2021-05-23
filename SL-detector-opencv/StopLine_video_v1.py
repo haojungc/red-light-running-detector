@@ -237,7 +237,7 @@ while flag:
 
             if lineLength > 30 and x2 != x1: # if line is long enough # dont divide by zero
                 slope = (y2-y1)/(x2-x1) # get slope line
-                tanTheta = math.tan( (y2-y1)/(x2-x1) )
+                #tanTheta = math.tan( (y2-y1)/(x2-x1) )
                 angle = math.atan(tanTheta) * 180/pi
                 if abs(angle) < 2.5 and abs(angle) >= 0:
                     q1 = (x1 - 25, y1)
