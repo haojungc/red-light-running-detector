@@ -11,6 +11,52 @@ from darknet.python.darknet import detect
 from src.label              import dknet_label_conversion
 from src.utils              import nms
 
+def find_all(a_str, sub):
+    start = 0
+    while True:
+        start = a_str.find(sub, start)
+        if start == -1: return
+        yield start
+        start += len(sub)
+
+def match(lp, lp_target):
+    if lp == lp_target:
+        return True
+
+    lp_list = list(lp)
+    modified = False
+    occur_1 = list(find_all(lp_target, '1'))
+    for i in occur_1:
+        if lp_list[i] == 'I':
+            lp_list[i] = '1'
+            modified = True
+
+    occur_H = list(find_all(lp_target, 'H'))
+    for i in occur_H:
+        if lp_list[i] == 'M' or lp_list[i] == 'W':
+            lp_list[i] = 'H'
+            modified = True
+
+    occur_M = list(find_all(lp_target, 'M'))
+    for i in occur_M:
+        if lp_list[i] == 'H':
+            lp_list[i] = 'M'
+            modified = True
+
+    occur_W = list(find_all(lp_target, 'W'))
+    for i in occur_W:
+        if lp_list[i] == 'H' or lp_list[i] == 'V':
+            lp_list[i] = 'W'
+            modified = True
+
+    lp = "".join(lp_list)
+    if modified is True:
+        print('Modified LP: %s' % lp)
+
+    if lp == lp_target:
+        return True
+    else:
+        return False
 
 if __name__ == '__main__':
 
@@ -59,7 +105,7 @@ if __name__ == '__main__':
                 if lp_len >= 6 and lp_len <= 7:
                     print('\t\tLP: %s' % lp_str)
 
-                    if lp_str == lp_target:
+                    if lp_len == len(lp_target) and match(lp_str, lp_target) is True:
                         target_found = True
 
                         # Erases the trailing substring "_lp" from `bname`.
