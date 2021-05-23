@@ -6,11 +6,11 @@ import cv2
 cap = cv2.VideoCapture(sys.argv[1])
 if not cap.isOpened():
     cout << "Could not open or find the video" << endl
-
+fps = cap.get(cv2.CAP_PROP_FPS)
 #------ video writer-----------
 odir = sys.argv[4]
 fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
-videoOut = cv2.VideoWriter(odir + "judge_result.avi",fourcc, 20.0, (1920,1080))
+videoOut = cv2.VideoWriter(odir + "judge_result.avi",fourcc, fps, (1920,1080))
 
 #------ info preprocess--------
 try:
@@ -44,7 +44,6 @@ TV_file.close()
 
 
 # ------- Judge violation--------
-violateFLag = 0
 violateFrame = -1
 violateCount = 0
 slots_length = 10
@@ -61,16 +60,16 @@ for i in range(frameCount - 2*slots_length + 1):
 
     if pre_sum < 0 and pos_sum > 0: # pre_sum < 0 indicates car was before the stopline
         violateCount = violateCount+1
-    else:
-        violateCount = 0
 
-    if violateCount > 5:
-        violateFrame = RL_startFrame + (i + slots_length)
+    if violateCount > 0:
+        violateFrame = RL_startFrame + (i + slots_length) # the frame in the middle slot
         print('found target vehicle violating law!')
         break
     
 
 # ------- Output video ---------
+start = violateFrame - fps*3    # 3 sec before
+end = violateFrame + fps*3      # 3 sec after
 flag, im = cap.read()
 while flag:
     if violateFrame == -1:
@@ -78,8 +77,6 @@ while flag:
         break
     flag, im = cap.read()  
     frameNum = cap.get(cv2.CAP_PROP_POS_FRAMES)
-    start = violateFrame - slots_length
-    end = violateFrame + slots_length
     if frameNum > start and frameNum < end :
         drawIm = im.copy()
         # cv2.line(drawIm,(100,500), (1800,500), (0,255,0), 4)
