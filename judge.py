@@ -6,11 +6,14 @@ import cv2
 cap = cv2.VideoCapture(sys.argv[1])
 if not cap.isOpened():
     cout << "Could not open or find the video" << endl
+    exit(1)
 fps = cap.get(cv2.CAP_PROP_FPS)
+width = float(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+height = float(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 #------ video writer-----------
 odir = sys.argv[4]
 fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
-videoOut = cv2.VideoWriter(odir + "judge_result.avi",fourcc, fps, (1920,1080))
+videoOut = cv2.VideoWriter(odir + "judge_result.avi",fourcc, fps, (width,height))
 
 #------ info preprocess--------
 try:
@@ -46,17 +49,16 @@ TV_file.close()
 # ------- Judge violation--------
 violateFrame = -1
 violateCount = 0
-slots_length = 10
-judge_slots = [] # scan diff[] with 10 slot ex []
+slots_length = 5
 for i in range(frameCount - 2*slots_length + 1):
     judge_slots_pre = diff[i: i+slots_length]
-    judge_slots_pos = diff[i+slots_length+1: i+2*slots_length+1]
+    judge_slots_pos = diff[i+slots_length: i+2*slots_length]
     pre_sum = 0
     pos_sum = 0
     for tmp in judge_slots_pre: # get sum of slot elements
         pre_sum = pre_sum + tmp
     for tmp in judge_slots_pos:
-        pos_sum = pos_sum + tmp        
+        pos_sum = pos_sum + tmp
 
     if pre_sum < 0 and pos_sum > 0: # pre_sum < 0 indicates car was before the stopline
         violateCount = violateCount+1
