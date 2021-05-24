@@ -84,8 +84,10 @@ for i in range(frameCount - 2*slots_length + 1):
     
 
 # ------- Output video ---------
-start = violateFrame - fps*3    # 3 sec before
-end = violateFrame + fps*3      # 3 sec after
+start = violateFrame - fps*1    # 1 sec before
+if start < 0:
+    start = 0
+end = violateFrame + fps*2      # 2 sec after
 flag, im = cap.read()
 while flag:
     if violateFrame == -1:
@@ -97,11 +99,12 @@ while flag:
         drawIm = im.copy()
         # cv2.line(drawIm,(100,500), (1800,500), (0,255,0), 4)
         font                   = cv2.FONT_HERSHEY_SIMPLEX
-        bottomLeftCornerOfText = (900,500)
+        bottomLeftCornerOfText = (850,500)
         fontScale              = 3
         fontColor              = (255,255,255)
-        lineType               = 2
-        cv2.putText(drawIm,'Run Red Light!', bottomLeftCornerOfText, font, fontScale, fontColor, lineType)
+        thickness              = 4
+        lineType               = cv2.LINE_8
+        cv2.putText(drawIm,'Red Light Violation', bottomLeftCornerOfText, font, fontScale, fontColor, lineType)
         videoOut.write(drawIm)
     else:
         videoOut.write(im) 
