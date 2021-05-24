@@ -99,9 +99,9 @@ while flag:
         drawIm = im.copy()
         # cv2.line(drawIm,(100,500), (1800,500), (0,255,0), 4)
         font                   = cv2.FONT_HERSHEY_SIMPLEX
-        bottomLeftCornerOfText = (650,500)
+        bottomLeftCornerOfText = (600,500)
         fontScale              = 3
-        fontColor              = (0,255,0)
+        fontColor              = (62,255,9)
         thickness              = 4
         lineType               = cv2.LINE_8
         cv2.putText(drawIm,'Red Light Violation', bottomLeftCornerOfText, font, fontScale, fontColor, lineType)
