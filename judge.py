@@ -101,7 +101,7 @@ while flag:
         font                   = cv2.FONT_HERSHEY_SIMPLEX
         bottomLeftCornerOfText = (600,500)
         fontScale              = 3
-        fontColor              = (62,255,9)
+        fontColor              = (9,255,62) # BGR
         thickness              = 4
         lineType               = cv2.LINE_8
         cv2.putText(drawIm,'Red Light Violation', bottomLeftCornerOfText, font, fontScale, fontColor, lineType)
