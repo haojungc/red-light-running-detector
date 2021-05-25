@@ -123,10 +123,10 @@ while flag:
     height_ratio_1 = (0.75-0.5) # mid coord - top coord
     height_ratio_2 = (0.9-0.75) # bottom coord - mid coord 
     p0 = (im.shape[1] * (0.5 - half_bottom_width_ratio), im.shape[0] * (0.5+height_ratio_1+height_ratio_2)) # bottom left
-    p1 = (im.shape[1] * (0.5 - half_bottom_width_ratio), im.shape[0] * (0.5+height_ratio)) # middle left
-    p2 = (im.shape[1] * (0.5 - (half_bottom_width_ratio - height_ratio*math.tan(45 * pi/180))), im.shape[0]*0.50) # top left  
-    p3 = (im.shape[1] * (0.5 + (half_bottom_width_ratio - height_ratio*math.tan(45 * pi/180))), im.shape[0]*0.50) # top right
-    p4 = (im.shape[1] * (0.5 + half_bottom_width_ratio), im.shape[0] * (0.5+height_ratio)) # middle right
+    p1 = (im.shape[1] * (0.5 - half_bottom_width_ratio), im.shape[0] * (0.5+height_ratio_1)) # middle left
+    p2 = (im.shape[1] * (0.5 - (half_bottom_width_ratio - height_ratio_1*math.tan(45 * pi/180))), im.shape[0]*0.50) # top left  
+    p3 = (im.shape[1] * (0.5 + (half_bottom_width_ratio - height_ratio_1*math.tan(45 * pi/180))), im.shape[0]*0.50) # top right
+    p4 = (im.shape[1] * (0.5 + half_bottom_width_ratio), im.shape[0] * (0.5+height_ratio_1)) # middle right
     p5 = (im.shape[1] * (0.5 + half_bottom_width_ratio), im.shape[0] * (0.5+height_ratio_1+height_ratio_2)) # bottom right
     road = [[p0,p1,p2,p3,p4,p5]] # house shape
 
