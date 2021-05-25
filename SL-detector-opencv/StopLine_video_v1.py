@@ -145,11 +145,12 @@ while flag:
             tmp = line.split()
             for i in range(5):
                 tmp[i] = float(tmp[i])
-            ratio = 0.8 # shrink inward from the box border
-            pt1 = [ im.shape[1]*(tmp[1]-ratio*tmp[3]/2), im.shape[0]*(tmp[2]-tmp[4]/2) ] # top left
-            pt2 = [ im.shape[1]*(tmp[1]+ratio*tmp[3]/2), im.shape[0]*(tmp[2]-tmp[4]/2) ] # top right
-            pt3 = [ im.shape[1]*(tmp[1]+ratio*tmp[3]/2), im.shape[0]*(tmp[2]+tmp[4]/2) ] # bottom right
-            pt4 = [ im.shape[1]*(tmp[1]-ratio*tmp[3]/2), im.shape[0]*(tmp[2]+tmp[4]/2) ] # bottom left
+            ratio_in = 0.8 # shrink inward from the box border
+            ratio_out = 1.1 # expand outward
+            pt1 = [ im.shape[1]*(tmp[1]-ratio_in*tmp[3]/2), im.shape[0]*(tmp[2]-ratio_out*tmp[4]/2) ] # top left
+            pt2 = [ im.shape[1]*(tmp[1]+ratio_in*tmp[3]/2), im.shape[0]*(tmp[2]-ratio_out*tmp[4]/2) ] # top right
+            pt3 = [ im.shape[1]*(tmp[1]+ratio_in*tmp[3]/2), im.shape[0]*(tmp[2]+tmp[4]/2) ] # bottom right
+            pt4 = [ im.shape[1]*(tmp[1]-ratio_in*tmp[3]/2), im.shape[0]*(tmp[2]+tmp[4]/2) ] # bottom left
             mVs.append([pt1,pt2,pt3,pt4])
 
         bVertices = np.array(mVs, dtype=np.int32)
