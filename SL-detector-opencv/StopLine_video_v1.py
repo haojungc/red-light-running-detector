@@ -120,12 +120,15 @@ while flag:
 
     #--------------------CREATE MASK---------------------------
     half_bottom_width_ratio = 2.0/5.0
-    height_ratio = (0.9-0.5) # bottom coord - top coord
-    p1 = (im.shape[1] * (0.5 - half_bottom_width_ratio), im.shape[0] * (0.5+height_ratio))
-    p2 = (im.shape[1] * (0.5 - (half_bottom_width_ratio - height_ratio*math.tan(50 * pi/180))), im.shape[0]*0.50)
-    p3 = (im.shape[1] * (0.5 + (half_bottom_width_ratio - height_ratio*math.tan(50 * pi/180))), im.shape[0]*0.50)
-    p4 = (im.shape[1] * (0.5 + half_bottom_width_ratio), im.shape[0] * (0.5+height_ratio))
-    road = [[p1,p2,p3,p4]]
+    height_ratio_1 = (0.75-0.5) # mid coord - top coord
+    height_ratio_2 = (0.9-0.75) # bottom coord - mid coord 
+    p0 = (im.shape[1] * (0.5 - half_bottom_width_ratio), im.shape[0] * (0.5+height_ratio_1+height_ratio_2)) # bottom left
+    p1 = (im.shape[1] * (0.5 - half_bottom_width_ratio), im.shape[0] * (0.5+height_ratio)) # middle left
+    p2 = (im.shape[1] * (0.5 - (half_bottom_width_ratio - height_ratio*math.tan(45 * pi/180))), im.shape[0]*0.50) # top left  
+    p3 = (im.shape[1] * (0.5 + (half_bottom_width_ratio - height_ratio*math.tan(45 * pi/180))), im.shape[0]*0.50) # top right
+    p4 = (im.shape[1] * (0.5 + half_bottom_width_ratio), im.shape[0] * (0.5+height_ratio)) # middle right
+    p5 = (im.shape[1] * (0.5 + half_bottom_width_ratio), im.shape[0] * (0.5+height_ratio_1+height_ratio_2)) # bottom right
+    road = [[p0,p1,p2,p3,p4,p5]] # house shape
 
     if int(frameNum) > int(startFrame) and int(frameNum) < int(endFrame):
         nstr = str(int(frameNum)).zfill(3)
