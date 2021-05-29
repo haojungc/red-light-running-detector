@@ -77,6 +77,7 @@ fourcc = cv2.VideoWriter_fourcc(*'MJPG')
 videoOut = cv2.VideoWriter(odir + "outSL.avi", fourcc, fps, (im.shape[1],im.shape[0]))
 vidMask = cv2.VideoWriter(odir + "outMask.avi", fourcc, fps, (im.shape[1],im.shape[0]), 0)  # last argument for greyscale image
 vidCan = cv2.VideoWriter(odir + "outCan.avi", fourcc, fps, (im.shape[1], im.shape[0]), 0)
+vidHough = cv2.VideoWriter(odir + "outHough.avi", fourcc, fps, (im.shape[1], im.shape[0]))
 # -------Open output text file-----------------------
 SL_file = open(odir + "SL_ycord.txt", 'w')
 # -------Read yolo bbox text file from yolo darknet------
@@ -225,7 +226,8 @@ while flag:
         #print(lines)
         for line in lines:
             cv2.line(allLinesIm,(line[0][0],line[0][1]),(line[0][2],line[0][3]),(255,255,0),2) # plot line
-
+        
+        vidHough.write(allLinesIm)
         #cv2.imshow("Hough Lines", allLinesIm)
         #cv2.waitKey(fRate)
 
@@ -384,6 +386,9 @@ while flag:
         #    break
 
     else:
+        noLinesIm = np.zeros_like(maskedIm)
+        vidHough.write(noLinesIm)        
+
         noline(kalman ,kCount, y_k, im, frameNum, SL_file, videoOut)
 #        kCount += 1
 #        if kCount > kThres:
@@ -403,5 +408,6 @@ SL_file.close()
 videoOut.release()
 vidMask.release()
 vidCan.release()
+vidHough.release()
 # Release input video
 cap.release()
