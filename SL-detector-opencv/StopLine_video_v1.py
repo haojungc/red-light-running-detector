@@ -222,7 +222,7 @@ while flag:
     lines = cv2.HoughLinesP(maskedIm, rho, theta, threshold, minLineLength = minLineLength, maxLineGap = maxLineGap)
 
     if lines is not None and len(lines) > 2:
-        allLinesIm = np.zeros_like(maskedIm)
+        allLinesIm = cv2.cvtColor(maskedIm, cv2.COLOR_GRAY2BGR)
         #print(lines)
         for line in lines:
             cv2.line(allLinesIm,(line[0][0],line[0][1]),(line[0][2],line[0][3]),(255,255,0),2) # plot line
@@ -386,7 +386,7 @@ while flag:
         #    break
 
     else:
-        noLinesIm = np.zeros_like(maskedIm)
+        noLinesIm = cv2.cvtColor(maskedIm, cv2.COLOR_GRAY2BGR)
         vidHough.write(noLinesIm)        
 
         noline(kalman ,kCount, y_k, im, frameNum, SL_file, videoOut)
